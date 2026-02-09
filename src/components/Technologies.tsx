@@ -8,7 +8,7 @@ const technologies = [
     { name: "Flutter", icon: "flutter" },
     { name: "Unity", icon: "unity" },
     { name: "FastAPI", icon: "fastapi" },
-    { name: "AWS", icon: "amazon" },
+    { name: "AWS", icon: "amazonaws" },
     { name: "Docker", icon: "docker" },
     { name: "Node.js", icon: "nodedotjs" },
     { name: "React.js", icon: "react" },
@@ -34,7 +34,7 @@ const itemVariants = {
 export default function Technologies() {
     return (
         <section id="technologies" className="py-24 bg-gray-50 relative overflow-hidden">
-            <div className="container mx-auto px-6 text-center relative z-10">
+            <div className="container mx-auto px-4 text-center relative z-10 w-full">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -56,14 +56,14 @@ export default function Technologies() {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: false, amount: 0.1 }}
-                    className="flex flex-wrap lg:flex-nowrap justify-center gap-2 md:gap-4 items-center px-4"
+                    className="flex flex-wrap lg:flex-nowrap justify-center gap-4 md:gap-3 xl:gap-6 items-center w-full max-w-[1400px] mx-auto overflow-x-visible"
                 >
                     {technologies.map((tech) => (
                         <motion.div
                             key={tech.name}
                             variants={itemVariants}
                             whileHover={{ scale: 1.1, y: -5 }}
-                            className="flex flex-col items-center gap-4 group cursor-pointer w-28 md:w-32"
+                            className="flex flex-col items-center gap-3 group cursor-pointer w-full md:w-32"
                         >
                             <div className="relative w-20 h-20 md:w-24 md:h-24 bg-white rounded-2xl flex items-center justify-center shadow-sm transition-all duration-300 p-[2px] overflow-hidden">
                                 {/* Gradient Border Layer */}

@@ -86,19 +86,24 @@ export default function Showcase() {
     return (
         <section id="showcase" className="py-24 bg-white relative overflow-hidden">
             <div className="container mx-auto px-6">
-                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6 relative z-10">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false, amount: 0.3 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="flex flex-col items-center text-center mb-16 gap-6 relative z-10 mx-auto max-w-3xl"
+                >
                     <div>
-                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">Real-World Success Stories</h2>
+                        <h2 className="text-3xl md:text-5xl font-bold mb-4">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-xeios via-purple-600 to-xeios-dark">
+                                Real-World Success Stories
+                            </span>
+                        </h2>
                         <p className="text-gray-500 text-lg">How Our Solutions Helped Businesses Overcome Challenges and Achieve Growth</p>
                     </div>
-                    <button className="px-8 py-3 bg-white border border-gray-200 rounded-full font-bold text-gray-900 hover:border-xeios transition-all flex items-center gap-2 group relative overflow-hidden shadow-sm">
-                        <span className="relative z-10 transition-colors group-hover:text-xeios">View Our Portfolio</span>
-                        <ArrowRight className="w-5 h-5 relative z-10 transition-all group-hover:translate-x-1 group-hover:text-xeios" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-xeios/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </button>
-                </div>
+                </motion.div>
 
-                <div className="relative min-h-[600px] flex items-center justify-center">
+                <div className="relative min-h-[850px] md:min-h-[700px] flex items-center justify-center">
                     <AnimatePresence initial={false} custom={direction}>
                         <motion.div
                             key={currentIndex}
@@ -113,19 +118,45 @@ export default function Showcase() {
                             }}
                             className="absolute w-full"
                         >
-                            <div className="group/card relative bg-white rounded-[40px] overflow-hidden shadow-2xl flex flex-col lg:flex-row items-stretch min-h-[500px] border border-gray-100 transition-all duration-500 hover:shadow-xeios/20">
+                            <div className="group/card relative bg-white rounded-[40px] overflow-hidden shadow-2xl flex flex-col lg:flex-row items-stretch min-h-[450px] md:min-h-[500px] border border-gray-100 transition-all duration-500 hover:shadow-xeios/20">
                                 {/* Border Highlight Glow */}
                                 <div className="absolute inset-0 rounded-[40px] border-2 border-transparent group-hover/card:border-xeios/30 transition-all duration-500 z-50 pointer-events-none" />
                                 <div className="absolute inset-0 rounded-[40px] ring-1 ring-inset ring-gray-100 group-hover/card:ring-xeios/20 z-50 pointer-events-none" />
 
                                 {/* Project Info */}
-                                <div className="lg:w-1/2 p-8 md:p-16 flex flex-col justify-center relative overflow-hidden">
-                                    {/* Decorative Gradient Splashes */}
-                                    <div className="absolute -top-20 -left-20 w-80 h-80 bg-xeios/5 blur-[100px] rounded-full pointer-events-none" />
-                                    <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-purple-400/5 blur-[100px] rounded-full pointer-events-none" />
+                                <div className="lg:w-1/2 p-6 md:p-16 flex flex-col justify-center relative overflow-hidden">
+                                    {/* Decorative Gradient Splashes - SUBTLE & ELEGANT */}
+                                    <motion.div
+                                        animate={{
+                                            scale: [1, 1.2, 1],
+                                            opacity: [0.1, 0.2, 0.1],
+                                            x: [0, 20, 0],
+                                            y: [0, -20, 0]
+                                        }}
+                                        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                                        className="absolute -top-10 -left-10 w-[400px] h-[400px] bg-xeios/15 blur-[120px] rounded-full pointer-events-none"
+                                    />
+                                    <motion.div
+                                        animate={{
+                                            scale: [1, 1.3, 1],
+                                            opacity: [0.08, 0.15, 0.08],
+                                            x: [0, -30, 0],
+                                            y: [0, 30, 0]
+                                        }}
+                                        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                        className="absolute -bottom-10 -right-10 w-[450px] h-[450px] bg-purple-600/10 blur-[130px] rounded-full pointer-events-none"
+                                    />
+                                    <motion.div
+                                        animate={{
+                                            scale: [1, 1.2, 1],
+                                            opacity: [0.05, 0.1, 0.05]
+                                        }}
+                                        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 blur-[150px] rounded-full pointer-events-none"
+                                    />
 
                                     {/* Animated Light Background Detail */}
-                                    <div className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_50%_50%,rgba(103,44,141,0.05),transparent_70%)]" />
+                                    <div className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_50%_50%,rgba(103,44,141,0.1),transparent_70%)]" />
 
                                     <div className="relative z-10">
                                         <div className="flex items-center gap-3 mb-8">
@@ -135,11 +166,11 @@ export default function Showcase() {
                                             <span className="text-xeios font-semibold">{currentProject.category}</span>
                                         </div>
 
-                                        <h3 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 uppercase tracking-tight">
+                                        <h3 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4 md:mb-6 uppercase tracking-tight">
                                             {currentProject.title}
                                         </h3>
 
-                                        <p className="text-gray-600 text-lg mb-10 leading-relaxed max-w-xl">
+                                        <p className="text-gray-600 text-base md:text-lg mb-8 md:mb-10 leading-relaxed max-w-xl">
                                             {currentProject.desc}
                                         </p>
 
@@ -175,16 +206,16 @@ export default function Showcase() {
                     </AnimatePresence>
                 </div>
 
-                {/* Carousel Controls */}
-                <div className="flex items-center justify-center gap-8 mt-12">
+                {/* Carousel Controls - REFINED UI */}
+                <div className="flex items-center justify-center gap-6 mt-12">
                     <button
                         onClick={prevProject}
-                        className="w-14 h-14 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm"
+                        className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-sm flex items-center justify-center hover:bg-black/30 transition-all text-white shadow-sm"
                     >
-                        <ArrowLeft className="w-6 h-6 text-gray-900" />
+                        <ArrowLeft className="w-5 h-5" />
                     </button>
 
-                    <div className="flex gap-3">
+                    <div className="flex gap-2.5">
                         {projects.map((_, idx) => (
                             <button
                                 key={idx}
@@ -192,7 +223,7 @@ export default function Showcase() {
                                     setDirection(idx > currentIndex ? 1 : -1);
                                     setCurrentIndex(idx);
                                 }}
-                                className={`h-2.5 rounded-full transition-all duration-300 ${idx === currentIndex ? "w-8 bg-purple-600" : "w-2.5 bg-gray-200"
+                                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${idx === currentIndex ? "bg-xeios scale-110 shadow-sm" : "bg-black/20 hover:bg-black/30"
                                     }`}
                             />
                         ))}
@@ -200,9 +231,9 @@ export default function Showcase() {
 
                     <button
                         onClick={nextProject}
-                        className="w-14 h-14 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm"
+                        className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-sm flex items-center justify-center hover:bg-black/30 transition-all text-white shadow-sm"
                     >
-                        <ArrowRight className="w-6 h-6 text-gray-900" />
+                        <ArrowRight className="w-5 h-5" />
                     </button>
                 </div>
             </div>
