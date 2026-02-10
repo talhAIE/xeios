@@ -5,6 +5,7 @@ import { CheckCircle2 } from "lucide-react";
 import { SplineScene } from "@/components/ui/spline";
 import { Spotlight } from "@/components/ui/spotlight";
 import { GlowCard } from "@/components/ui/spotlight-card";
+import ElectricCanvas from "@/components/ui/electric-canvas";
 
 export default function About() {
     return (
@@ -66,6 +67,8 @@ export default function About() {
                                 className="w-full h-full"
                             />
                         </div>
+                        {/* Sky-lightning strikes from above — fires on scroll */}
+                        <ElectricCanvas duration={1800} className="z-10" />
                     </motion.div>
                 </div>
             </div>
