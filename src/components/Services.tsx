@@ -47,15 +47,16 @@ const expertise = [
 ];
 
 // --- Animation Variants ---
+const headingWords = ["Comprehensive"];
+const gradientWords = ["AI", "Capabilities"];
 
-/** Header words stagger in one-by-one */
-const headerContainerVariants: Variants = {
+const headingContainerVariants: Variants = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+    visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
 };
 
-const headerWordVariants: Variants = {
-    hidden: { opacity: 0, y: 30, filter: "blur(6px)" },
+const wordVariants: Variants = {
+    hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
     visible: {
         opacity: 1,
         y: 0,
@@ -64,13 +65,21 @@ const headerWordVariants: Variants = {
     },
 };
 
-/** Card grid staggers each card */
+const labelVariants: Variants = {
+    hidden: { opacity: 0, y: 20, letterSpacing: "0em" },
+    visible: {
+        opacity: 1,
+        y: 0,
+        letterSpacing: "0.15em",
+        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+    },
+};
+
 const gridVariants: Variants = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } },
 };
 
-/** Each card scales + fades from below with blur */
 const cardVariants: Variants = {
     hidden: { opacity: 0, y: 60, scale: 0.92, filter: "blur(6px)" },
     visible: {
@@ -82,80 +91,66 @@ const cardVariants: Variants = {
     },
 };
 
-const LABEL_WORDS = ["OUR", "EXPERTISE"];
-const HEADING_WORDS = ["Comprehensive"];
-const GRADIENT_TEXT = "AI Capabilities";
-
 export default function Services() {
     return (
-        <section id="services" className="py-24 bg-[#0A0118] overflow-hidden">
-            <div className="container mx-auto px-6">
-                {/* Section Header — word-by-word stagger, replays on scroll */}
+        <section id="services" className="py-24 bg-[#0A0118] relative overflow-hidden">
+            {/* Ambient glow */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(103,44,141,0.12)_0%,transparent_60%)] pointer-events-none" />
+
+            <div className="container mx-auto px-6 relative z-10">
+                {/* Section Header */}
                 <motion.div
                     className="text-center mb-16"
-                    variants={headerContainerVariants}
+                    variants={headingContainerVariants}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: false, amount: 0.6 }}
+                    viewport={{ once: false, amount: 0.5 }}
                 >
-                    {/* Label */}
-                    <div className="flex justify-center gap-x-2 mb-2">
-                        {LABEL_WORDS.map((word) => (
-                            <motion.span
-                                key={word}
-                                className="text-xeios font-bold text-xl tracking-wide"
-                                variants={headerWordVariants}
-                            >
-                                {word}
-                            </motion.span>
-                        ))}
-                    </div>
+                    <motion.span
+                        className="text-xeios font-bold text-xl tracking-wide inline-block"
+                        variants={labelVariants}
+                    >
+                        OUR EXPERTISE
+                    </motion.span>
 
-                    {/* Heading */}
-                    <h2 className="text-4xl md:text-5xl font-bold text-white flex flex-wrap justify-center gap-x-[0.3em]">
-                        {HEADING_WORDS.map((word) => (
+                    <h2 className="text-4xl md:text-5xl font-bold mt-2 text-white flex flex-wrap justify-center gap-x-[0.3em]">
+                        {headingWords.map((word) => (
+                            <motion.span key={word} className="inline-block" variants={wordVariants}>
+                                {word}
+                            </motion.span>
+                        ))}
+                        {gradientWords.map((word) => (
                             <motion.span
                                 key={word}
-                                className="inline-block"
-                                variants={headerWordVariants}
+                                className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-xeios via-purple-500 to-xeios-dark"
+                                variants={wordVariants}
                             >
                                 {word}
                             </motion.span>
                         ))}
-                        <motion.span
-                            className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-xeios via-purple-600 to-xeios-dark"
-                            variants={{
-                                hidden: { opacity: 0, y: 40, scale: 0.9, filter: "blur(10px)" },
-                                visible: {
-                                    opacity: 1,
-                                    y: 0,
-                                    scale: 1,
-                                    filter: "blur(0px)",
-                                    transition: { type: "spring", damping: 18, stiffness: 90 },
-                                },
-                            }}
-                        >
-                            {GRADIENT_TEXT}
-                        </motion.span>
                     </h2>
                 </motion.div>
 
-                {/* Cards Grid — staggered reveal, replays on scroll */}
+                {/* Cards Grid */}
                 <motion.div
                     variants={gridVariants}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: false, amount: 0.05 }}
+                    viewport={{ once: false, amount: 0.1 }}
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
                 >
                     {expertise.map((item) => (
                         <motion.div
                             key={item.title}
                             variants={cardVariants}
-                            whileHover={{ y: -8, scale: 1.03, transition: { type: "spring", stiffness: 300, damping: 20 } }}
-                            className="group relative h-96 rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-xeios/15 transition-shadow duration-300 border border-white/5 hover:border-xeios/50"
+                            whileHover={{
+                                y: -8,
+                                scale: 1.03,
+                                transition: { type: "spring", stiffness: 300, damping: 20 },
+                            }}
+                            className="group relative h-96 rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-xeios/15 transition-shadow duration-500 border border-purple-900/20 hover:border-xeios/50"
                         >
-                            {/* Loading Skeleton */}
+                            {/* Shimmer skeleton */}
                             <div className="absolute inset-0 bg-[#110822] animate-pulse z-0" />
 
                             {/* Background Image */}
@@ -175,7 +170,7 @@ export default function Services() {
                                 <h3 className="text-xl font-bold text-white mb-2">
                                     {item.title}
                                 </h3>
-                                <p className="text-sm text-gray-200 line-clamp-2">
+                                <p className="text-sm text-gray-200 line-clamp-2 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
                                     {item.desc}
                                 </p>
                             </div>
