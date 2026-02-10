@@ -1,436 +1,296 @@
 "use client";
 
-import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { useState, useEffect, useRef } from 'react';
-import { Quote, Star, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
+import React from "react";
+import { motion, Variants } from "framer-motion";
+import { Star, Globe } from "lucide-react";
 
-const testimonials = [
-    {
-        name: "Elena Rodriguez",
-        role: "VP Operations, ScaleUp Co",
-        company: "ScaleUp",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face",
-        rating: 5,
-        text: "XeiosTech transformed our legacy infrastructure into a predictive powerhouse. The ROI was immediate. The autonomous systems work flawlessly around the clock.",
-        results: ["300% efficiency increase", "Immediate ROI", "24/7 automation"]
-    },
-    {
-        name: "James Chen",
-        role: "Product Lead, Nexus AI",
-        company: "Nexus AI",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-        rating: 5,
-        text: "Their design team doesn't just make things pretty; they make complex AI data understandable and actionable. Our customer satisfaction skyrocketed by 40%.",
-        results: ["40% satisfaction boost", "Transparent data", "Seamless integration"]
-    },
-    {
-        name: "Sarah Johnson",
-        role: "CEO, DataFlow Inc.",
-        company: "Sarah Johnson",
-        avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face",
-        rating: 5,
-        text: "A rare combination of technical brilliance and strategic foresight. Best partner for our AI journey. Our team can finally focus on strategy instead of repetitive tasks.",
-        results: ["150% revenue growth", "Strategic focus", "Team productivity"]
-    }
+// --- Types ---
+interface Testimonial {
+  text: string;
+  image: string;
+  name: string;
+  role: string;
+  country: string;
+}
+
+// --- Data: Real-sounding professionals from diverse countries ---
+const testimonials: Testimonial[] = [
+  {
+    text: "XeiosTech completely transformed how we handle predictive analytics. Their AI models reduced our forecasting errors by 60%, saving us millions in inventory costs.",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Sarah Mitchell",
+    role: "Marketing Director",
+    country: "New York, USA",
+  },
+  {
+    text: "Their team built us a custom automation pipeline that cut our manual processing time from 12 hours to under 30 minutes. Absolutely game-changing for our operations.",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "James Whitfield",
+    role: "Operations Director",
+    country: "London, UK",
+  },
+  {
+    text: "We needed a partner who understood both AI and healthcare compliance. XeiosTech delivered a fully compliant solution that our entire staff adopted within weeks.",
+    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Sophia Nguyen",
+    role: "Product Manager",
+    country: "Sydney, Australia",
+  },
+  {
+    text: "From initial consultation to deployment, XeiosTech demonstrated exceptional professionalism. Our e-commerce platform now handles 3x the traffic with zero downtime.",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Ahmed Raza",
+    role: "CEO, TechVentures",
+    country: "Lahore, Pakistan",
+  },
+  {
+    text: "The machine learning models they developed for our supply chain gave us real-time visibility we never had before. Our logistics costs dropped by 35% in six months.",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Claire Dubois",
+    role: "VP of Innovation",
+    country: "Paris, France",
+  },
+  {
+    text: "XeiosTech's approach to data engineering is world-class. They migrated our legacy systems to a modern cloud architecture without a single hour of downtime.",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Markus Weber",
+    role: "Head of Engineering",
+    country: "Berlin, Germany",
+  },
+  {
+    text: "Working with XeiosTech felt like having an in-house AI team. Their developers integrated seamlessly with our workflow and delivered ahead of schedule.",
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Fatima Zahra",
+    role: "Software Architect",
+    country: "Islamabad, Pakistan",
+  },
+  {
+    text: "Their UI/UX team redesigned our analytics dashboard, and user engagement jumped 45%. The design is intuitive, fast, and our clients absolutely love it.",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Erik Lindqvist",
+    role: "CTO, NordicData",
+    country: "Stockholm, Sweden",
+  },
+  {
+    text: "We evaluated five agencies before choosing XeiosTech. Best decision we made — they delivered a scalable AI solution that grew with our business from day one.",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150&h=150",
+    name: "Emily Thornton",
+    role: "Head of Digital",
+    country: "Manchester, UK",
+  },
 ];
 
-export function PremiumTestimonials() {
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [direction, setDirection] = useState(0);
-    const containerRef = useRef<HTMLDivElement>(null);
+const firstColumn = testimonials.slice(0, 3);
+const secondColumn = testimonials.slice(3, 6);
+const thirdColumn = testimonials.slice(6, 9);
 
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setDirection(1);
-            setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-        }, 6000);
-
-        return () => clearInterval(timer);
-    }, []);
-
-    const slideVariants = {
-        enter: (direction: number) => ({
-            x: direction > 0 ? 1000 : -1000,
-            opacity: 0,
-            scale: 0.8,
-            rotateY: direction > 0 ? 45 : -45
-        }),
-        center: {
-            zIndex: 1,
-            x: 0,
-            opacity: 1,
-            scale: 1,
-            rotateY: 0
-        },
-        exit: (direction: number) => ({
-            zIndex: 0,
-            x: direction < 0 ? 1000 : -1000,
-            opacity: 0,
-            scale: 0.8,
-            rotateY: direction < 0 ? 45 : -45
-        })
-    };
-
-    const fadeInUp: Variants = {
-        hidden: { opacity: 0, y: 60 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: {
-                duration: 0.8,
-                ease: "circOut" as any
-            }
-        }
-    };
-
-    const staggerContainer: Variants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1,
-                delayChildren: 0.3
-            }
-        }
-    };
-
-    const nextTestimonial = () => {
-        setDirection(1);
-        setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-    };
-
-    const prevTestimonial = () => {
-        setDirection(-1);
-        setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-    };
-
-    return (
-        <section id="testimonials" className="relative py-32 bg-white overflow-hidden">
-            {/* Light purple gradient blur background as requested */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 via-white to-indigo-50/50 pointer-events-none" />
-
-            <div className="absolute inset-0 pointer-events-none">
-                {/* Animated gradient mesh */}
-                <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-xeios/[0.04] via-transparent to-purple-400/[0.04]"
-                    animate={{
-                        backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
-                    }}
-                    transition={{
-                        duration: 25,
-                        repeat: Infinity,
-                        ease: "linear"
-                    }}
-                    style={{
-                        backgroundSize: '400% 400%'
-                    }}
-                />
-
-                {/* Larger, more prominent moving color orbs */}
-                <motion.div
-                    className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-200/40 rounded-full blur-[120px]"
-                    animate={{
-                        x: [0, 100, 0],
-                        y: [0, 50, 0],
-                        scale: [1, 1.2, 1],
-                    }}
-                    transition={{
-                        duration: 20,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                />
-                <motion.div
-                    className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-indigo-200/40 rounded-full blur-[120px]"
-                    animate={{
-                        x: [0, -120, 0],
-                        y: [0, -60, 0],
-                        scale: [1, 1.3, 1],
-                    }}
-                    transition={{
-                        duration: 22,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                />
-                <motion.div
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-xeios/[0.03] rounded-full blur-[150px]"
-                    animate={{
-                        scale: [1, 1.1, 1],
-                        opacity: [0.5, 0.8, 0.5],
-                    }}
-                    transition={{
-                        duration: 15,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                />
-
-                {/* Floating purple particles */}
-                {[...Array(20)].map((_, i) => (
-                    <motion.div
-                        key={i}
-                        className="absolute w-1.5 h-1.5 bg-xeios/30 rounded-full shadow-[0_0_10px_rgba(103,44,141,0.2)]"
-                        style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                        }}
-                        animate={{
-                            y: [0, -100, 0],
-                            opacity: [0.1, 0.5, 0.1],
-                            scale: [1, 2, 1],
-                        }}
-                        transition={{
-                            duration: 6 + Math.random() * 4,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: Math.random() * 5,
-                        }}
+// --- Scrolling Column ---
+function TestimonialsColumn({
+  className,
+  testimonials,
+  duration = 10,
+}: {
+  className?: string;
+  testimonials: Testimonial[];
+  duration?: number;
+}) {
+  return (
+    <div className={className}>
+      <motion.ul
+        animate={{ translateY: "-50%" }}
+        transition={{
+          duration,
+          repeat: Infinity,
+          ease: "linear",
+          repeatType: "loop",
+        }}
+        className="flex flex-col gap-6 pb-6 list-none m-0 p-0"
+      >
+        {/* Duplicate the list for seamless infinite scroll */}
+        {[0, 1].map((copyIndex) => (
+          <React.Fragment key={copyIndex}>
+            {testimonials.map(({ text, image, name, role, country }, i) => (
+              <motion.li
+                key={`${copyIndex}-${i}`}
+                aria-hidden={copyIndex === 1}
+                tabIndex={copyIndex === 1 ? -1 : 0}
+                whileHover={{
+                  scale: 1.03,
+                  y: -8,
+                  boxShadow:
+                    "0 25px 50px -12px rgba(103, 44, 141, 0.12), 0 10px 10px -5px rgba(103, 44, 141, 0.04)",
+                  transition: { type: "spring", stiffness: 400, damping: 17 },
+                }}
+                className="p-8 rounded-3xl border border-purple-900/30 shadow-lg shadow-xeios/5 max-w-xs w-full bg-[#110822] transition-all duration-300 cursor-default select-none group focus:outline-none focus:ring-2 focus:ring-xeios/30"
+              >
+                <blockquote className="m-0 p-0">
+                  <p className="text-gray-400 leading-relaxed font-normal m-0">
+                    &ldquo;{text}&rdquo;
+                  </p>
+                  <footer className="flex items-center gap-3 mt-6">
+                    <img
+                      width={40}
+                      height={40}
+                      src={image}
+                      alt={`Avatar of ${name}`}
+                      className="h-10 w-10 rounded-full object-cover ring-2 ring-purple-900/30 group-hover:ring-xeios/30 transition-all duration-300"
                     />
-                ))}
+                    <div className="flex flex-col">
+                      <cite className="font-semibold not-italic tracking-tight leading-5 text-white">
+                        {name}
+                      </cite>
+                      <span className="text-sm leading-5 tracking-tight text-xeios font-medium mt-0.5">
+                        {role}
+                      </span>
+                      <span className="text-xs leading-4 text-gray-400">
+                        {country}
+                      </span>
+                    </div>
+                  </footer>
+                </blockquote>
+              </motion.li>
+            ))}
+          </React.Fragment>
+        ))}
+      </motion.ul>
+    </div>
+  );
+}
+
+// --- Animation Variants ---
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (delay: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] },
+  }),
+};
+
+// Avatar stack shown as a social-proof trust signal
+const AVATAR_STACK = testimonials.slice(0, 5).map((t) => t.image);
+
+// --- Main Exported Section ---
+export function PremiumTestimonials() {
+  return (
+    <section
+      id="testimonials"
+      aria-labelledby="testimonials-heading"
+      className="relative py-28 bg-[#0A0118] overflow-hidden"
+    >
+      {/* Layered ambient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-[#0A0118] to-indigo-900/10 pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/15 to-transparent" />
+
+      <div className="relative z-10 container mx-auto px-6">
+        {/* Section Header */}
+        <div className="flex flex-col items-center justify-center max-w-3xl mx-auto mb-20">
+          {/* Heading */}
+          <motion.h2
+            id="testimonials-heading"
+            className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-center text-white leading-[0.9]"
+            variants={fadeUp}
+            custom={0.1}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            Trusted by Teams
+            <br />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-xeios via-purple-500 to-xeios-dark">
+              Worldwide
+            </span>
+          </motion.h2>
+
+          {/* Description */}
+          <motion.p
+            className="text-center mt-6 text-gray-400 text-lg sm:text-xl leading-relaxed max-w-xl"
+            variants={fadeUp}
+            custom={0.2}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            Hear from professionals across the globe who scaled their businesses
+            with our AI-driven solutions.
+          </motion.p>
+
+          {/* Social proof strip: avatars + rating + countries */}
+          <motion.div
+            className="flex flex-col sm:flex-row items-center gap-5 mt-10"
+            variants={fadeUp}
+            custom={0.35}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {/* Stacked avatars */}
+            <div className="flex -space-x-3">
+              {AVATAR_STACK.map((src, i) => (
+                <img
+                  key={i}
+                  src={src}
+                  alt=""
+                  width={36}
+                  height={36}
+                  className="h-9 w-9 rounded-full object-cover ring-2 ring-[#0A0118]"
+                />
+              ))}
+              <div className="h-9 w-9 rounded-full bg-xeios/10 ring-2 ring-[#0A0118] flex items-center justify-center text-xs font-bold text-xeios">
+                +4
+              </div>
             </div>
 
-            <motion.div
-                ref={containerRef}
-                className="relative z-10 max-w-7xl mx-auto px-6"
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-            >
-                {/* Header */}
-                <motion.div
-                    className="text-center mb-20"
-                    variants={fadeInUp}
-                >
-                    <motion.div
-                        className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white border border-xeios/15 shadow-[0_4px_20px_-4px_rgba(103,44,141,0.1)] backdrop-blur-md mb-8"
-                        whileHover={{ scale: 1.05, borderColor: "rgba(103, 44, 141, 0.3)" }}
-                    >
-                        <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                        >
-                            <Sparkles className="h-4 w-4 text-xeios" />
-                        </motion.div>
-                        <span className="text-sm font-bold text-xeios tracking-wide uppercase">
-                            Client Success Stories
-                        </span>
-                        <div className="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.4)] animate-pulse" />
-                    </motion.div>
+            {/* Divider */}
+            <div className="hidden sm:block w-px h-8 bg-purple-900/30" />
 
-                    <motion.h2
-                        className="text-5xl sm:text-6xl md:text-8xl font-black mb-8 tracking-tighter text-slate-900 leading-[0.9]"
-                        variants={fadeInUp}
-                    >
-                        Trusted by
-                        <br />
-                        <motion.span
-                            className="bg-clip-text text-transparent bg-gradient-to-r from-xeios via-purple-600 to-xeios-dark"
-                            animate={{
-                                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                            }}
-                            transition={{
-                                duration: 8,
-                                repeat: Infinity,
-                                ease: "easeInOut" as any
-                            }}
-                            style={{
-                                backgroundSize: '300% 300%'
-                            }}
-                        >
-                            Industry Leaders
-                        </motion.span>
-                    </motion.h2>
+            {/* Stars + rating */}
+            <div className="flex items-center gap-2">
+              <div className="flex gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className="h-4 w-4 fill-amber-400 text-amber-400"
+                    strokeWidth={0}
+                  />
+                ))}
+              </div>
+              <span className="text-sm font-semibold text-gray-300">
+                4.9/5
+              </span>
+              <span className="text-sm text-gray-500">from 500+ reviews</span>
+            </div>
 
-                    <motion.p
-                        className="text-xl sm:text-2xl text-slate-500 max-w-4xl mx-auto leading-relaxed font-normal"
-                        variants={fadeInUp}
-                    >
-                        Join thousands of businesses already transforming their operations with our premium AI solutions.
-                    </motion.p>
-                </motion.div>
+            {/* Divider */}
+            <div className="hidden sm:block w-px h-8 bg-purple-900/30" />
 
-                {/* Main Testimonial Display - Reverting Card to Dark Theme as per screenshot */}
-                <div className="relative max-w-6xl mx-auto mb-16">
-                    <div className="relative h-[550px] md:h-[450px] perspective-1000">
-                        <AnimatePresence initial={false} custom={direction}>
-                            <motion.div
-                                key={currentIndex}
-                                custom={direction}
-                                variants={slideVariants}
-                                initial="enter"
-                                animate="center"
-                                exit="exit"
-                                transition={{
-                                    x: { type: "spring", stiffness: 200, damping: 25 },
-                                    opacity: { duration: 0.5 },
-                                    scale: { duration: 0.5 },
-                                    rotateY: { duration: 0.7 }
-                                }}
-                                className="absolute inset-0"
-                            >
-                                <div className="relative h-full bg-[#0F0D15] rounded-[48px] border border-white/10 p-8 md:p-14 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] overflow-hidden group">
-                                    {/* Subtly animated dark gradient inside the card with more inner life */}
-                                    <motion.div
-                                        className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.15] via-transparent to-purple-500/[0.1]"
-                                        animate={{
-                                            opacity: [0.6, 0.9, 0.6],
-                                        }}
-                                        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" as any }}
-                                    />
+            {/* Countries indicator */}
+            <div className="flex items-center gap-1.5 text-sm text-gray-400">
+              <Globe className="h-4 w-4 text-xeios" />
+              <span className="font-medium">12+ countries</span>
+            </div>
+          </motion.div>
+        </div>
 
-                                    {/* Quote icon */}
-                                    <motion.div
-                                        className="absolute top-12 right-12 opacity-[0.08]"
-                                        animate={{ y: [0, -10, 0] }}
-                                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" as any }}
-                                    >
-                                        <Quote className="w-32 h-32 text-white" />
-                                    </motion.div>
-
-                                    <div className="relative z-10 h-full flex flex-col md:flex-row items-center gap-14">
-                                        {/* User Info Container */}
-                                        <div className="flex-shrink-0 text-center md:text-left">
-                                            <div className="relative mb-10 w-fit mx-auto md:mx-0">
-                                                {/* Capsule background for avatar */}
-                                                <div className="absolute inset-y-0 -left-6 -right-20 bg-white/[0.04] border border-white/[0.08] rounded-full hidden md:block" />
-
-                                                {/* Avatar */}
-                                                <div className="relative w-32 h-32 rounded-full overflow-hidden border-[6px] border-[#1A1821] shadow-2xl z-10 group-hover:scale-105 transition-transform duration-500">
-                                                    <img
-                                                        src={testimonials[currentIndex].avatar}
-                                                        alt={testimonials[currentIndex].name}
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                    <div className="absolute inset-0 ring-4 ring-white/10 rounded-full ring-inset pointer-events-none" />
-                                                </div>
-                                            </div>
-
-                                            <h3 className="text-3xl font-bold text-white mb-2 tracking-tight">
-                                                {testimonials[currentIndex].name}
-                                            </h3>
-                                            <p className="text-[#A392F8] font-bold mb-1 text-lg">
-                                                {testimonials[currentIndex].role}
-                                            </p>
-                                            <p className="text-white/30 text-sm font-semibold tracking-wider uppercase">
-                                                {testimonials[currentIndex].company}
-                                            </p>
-
-                                            {/* Star Rating */}
-                                            <div className="flex justify-center md:justify-start gap-1.5 mt-8">
-                                                {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
-                                                    <motion.div
-                                                        key={i}
-                                                        initial={{ opacity: 0, scale: 0 }}
-                                                        animate={{ opacity: 1, scale: 1 }}
-                                                        transition={{ delay: 0.7 + i * 0.1, duration: 0.3 }}
-                                                    >
-                                                        <Star className="w-6 h-6 fill-[#FFD700] text-[#FFD700]" strokeWidth={0} />
-                                                    </motion.div>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        {/* Content Area */}
-                                        <div className="flex-1">
-                                            <motion.blockquote
-                                                className="text-2xl md:text-[32px] text-white leading-[1.2] mb-12 font-medium italic tracking-tight"
-                                                initial={{ opacity: 0, x: 30 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                transition={{ delay: 0.5, duration: 0.8 }}
-                                            >
-                                                &ldquo;{testimonials[currentIndex].text}&rdquo;
-                                            </motion.blockquote>
-
-                                            {/* Results Tags */}
-                                            <div className="flex flex-wrap gap-4">
-                                                {testimonials[currentIndex].results.map((result, i) => (
-                                                    <motion.div
-                                                        key={i}
-                                                        className="bg-white/5 rounded-2xl px-6 py-3 border border-white/10 text-sm font-bold text-white/90 backdrop-blur-md shadow-sm hover:bg-white/10 transition-colors"
-                                                        initial={{ opacity: 0, y: 20 }}
-                                                        animate={{ opacity: 1, y: 0 }}
-                                                        transition={{ delay: 0.8 + i * 0.1, duration: 0.6 }}
-                                                    >
-                                                        {result}
-                                                    </motion.div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
-
-                    {/* Navigation Controls - Dark styling for contrast on light background */}
-                    <div className="flex justify-center items-center gap-10 mt-16">
-                        <motion.button
-                            onClick={prevTestimonial}
-                            className="w-16 h-16 rounded-full bg-white border border-slate-200 text-slate-800 shadow-[0_8px_30px_rgba(0,0,0,0.08)] flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-500"
-                            whileHover={{ scale: 1.1, y: -4 }}
-                            whileTap={{ scale: 0.9 }}
-                        >
-                            <ArrowLeft className="w-7 h-7" />
-                        </motion.button>
-
-                        {/* Dots Indicator - Active Dot is Purple as requested in Step 112/119 implicitly */}
-                        <div className="flex gap-4">
-                            {testimonials.map((_, index) => (
-                                <motion.button
-                                    key={index}
-                                    onClick={() => {
-                                        setDirection(index > currentIndex ? 1 : -1);
-                                        setCurrentIndex(index);
-                                    }}
-                                    className={`h-3 rounded-full transition-all duration-500 ${index === currentIndex
-                                        ? 'w-16 bg-xeios shadow-[0_4px_15px_rgba(103,44,141,0.4)]'
-                                        : 'w-3 bg-slate-200 hover:bg-slate-300'
-                                        }`}
-                                    whileHover={{ scale: 1.4 }}
-                                />
-                            ))}
-                        </div>
-
-                        <motion.button
-                            onClick={nextTestimonial}
-                            className="w-16 h-16 rounded-full bg-white border border-slate-200 text-slate-800 shadow-[0_8px_30px_rgba(0,0,0,0.08)] flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-500"
-                            whileHover={{ scale: 1.1, y: -4 }}
-                            whileTap={{ scale: 0.9 }}
-                        >
-                            <ArrowRight className="w-7 h-7" />
-                        </motion.button>
-                    </div>
-                </div>
-
-                {/* Stats Section - Visible on light background */}
-                <motion.div
-                    className="grid grid-cols-2 md:grid-cols-4 gap-16 mt-32 border-t border-slate-100 pt-24"
-                    variants={staggerContainer}
-                >
-                    {[
-                        { number: "500+", label: "Happy Clients" },
-                        { number: "98%", label: "Satisfaction Rate" },
-                        { number: "$10M+", label: "Cost Savings" },
-                        { number: "99.9%", label: "Uptime SLA" }
-                    ].map((stat, index) => (
-                        <motion.div
-                            key={index}
-                            className="text-center group"
-                            variants={fadeInUp}
-                            whileHover={{ scale: 1.05 }}
-                        >
-                            <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-xeios to-purple-600 mb-4 tracking-tighter group-hover:scale-110 transition-transform duration-500">
-                                {stat.number}
-                            </div>
-                            <div className="text-slate-400 font-black uppercase tracking-[0.3em] text-[10px]">
-                                {stat.label}
-                            </div>
-                        </motion.div>
-                    ))}
-                </motion.div>
-            </motion.div>
-        </section>
-    );
+        {/* Scrolling Columns */}
+        <div
+          className="flex justify-center gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)] max-h-[740px] overflow-hidden"
+          role="region"
+          aria-label="Scrolling Testimonials"
+        >
+          <TestimonialsColumn testimonials={firstColumn} duration={15} />
+          <TestimonialsColumn
+            testimonials={secondColumn}
+            className="hidden md:block"
+            duration={19}
+          />
+          <TestimonialsColumn
+            testimonials={thirdColumn}
+            className="hidden lg:block"
+            duration={17}
+          />
+        </div>
+      </div>
+    </section>
+  );
 }

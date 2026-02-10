@@ -6,8 +6,8 @@
   --color-xeios: #672C8D;
   --color-xeios-dark: #4A1F66;
   --color-xeios-light: #8E44AD;
-  --color-surface: #F3F4F6;
-  --color-surface-highlight: #FFFFFF;
+  --color-surface: #110822;
+  --color-surface-highlight: #1A0E2E;
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -26,8 +26,8 @@
 }
 
 :root {
-  --background: #FFFFFF;
-  --foreground: #090B0B;
+  --background: #0A0118;
+  --foreground: #FFFFFF;
 }
 
 html {
@@ -42,10 +42,10 @@ body {
 }
 
 @utility glass-panel {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(17, 8, 34, 0.7);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(103, 44, 141, 0.1);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(103, 44, 141, 0.2);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
 @utility text-gradient {

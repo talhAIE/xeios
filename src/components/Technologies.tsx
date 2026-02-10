@@ -1,92 +1,197 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
-const technologies = [
-    { name: "MongoDB", icon: "mongodb" },
-    { name: "PostgreSQL", icon: "postgresql" },
-    { name: "Flutter", icon: "flutter" },
-    { name: "Unity", icon: "unity" },
-    { name: "FastAPI", icon: "fastapi" },
-    { name: "AWS", icon: "amazonaws" },
-    { name: "Docker", icon: "docker" },
-    { name: "Node.js", icon: "nodedotjs" },
-    { name: "React.js", icon: "react" },
-    { name: "Next.js", icon: "nextdotjs" },
+// --- Types ---
+interface Technology {
+  name: string;
+  /** Simple Icons slug — used to load from cdn.simpleicons.org/{slug} */
+  icon: string;
+  /** Optional hex color override (no #). Used for icons whose brand color is
+   *  white/invisible on a white background. */
+  color?: string;
+}
+
+// --- Technology Data (split into 3 rows for the marquee) ---
+// Color overrides are only needed when the brand color is white or too light.
+const row1: Technology[] = [
+  { name: "LangGraph", icon: "langchain" },
+  { name: "LangChain", icon: "langchain" },
+  { name: "N8N", icon: "n8n", color: "EA4B71" },
+  { name: "HuggingFace", icon: "huggingface" },
+  { name: "OpenCV", icon: "opencv" },
+  { name: "YOLO", icon: "ultralytics", color: "6C3AED" },
+  { name: "Python", icon: "python" },
+  { name: "PyTorch", icon: "pytorch" },
+  { name: "TensorFlow", icon: "tensorflow" },
 ];
 
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.1,
-            delayChildren: 0.2,
-        },
-    },
+const row2: Technology[] = [
+  { name: "Next.js", icon: "nextdotjs", color: "FFFFFF" },
+  { name: "Vue.js", icon: "vuedotjs" },
+  { name: "Tailwind CSS", icon: "tailwindcss" },
+  { name: "Node.js", icon: "nodedotjs" },
+  { name: "FastAPI", icon: "fastapi" },
+  { name: "Django", icon: "django", color: "44B78B" },
+  { name: "Flutter", icon: "flutter" },
+  { name: "React Native", icon: "react" },
+  { name: "Kotlin", icon: "kotlin" },
+  { name: "Swift", icon: "swift", color: "F05138" },
+];
+
+const row3: Technology[] = [
+  { name: "MongoDB", icon: "mongodb" },
+  { name: "Supabase", icon: "supabase" },
+  { name: "Selenium", icon: "selenium" },
+  { name: "Docker", icon: "docker" },
+  { name: "Kubernetes", icon: "kubernetes" },
+  { name: "GCP", icon: "googlecloud" },
+];
+
+// --- Animation Variants ---
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (delay: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] },
+  }),
 };
 
-const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-};
+/**
+ * Build the CDN URL for a Simple Icons icon.
+ * Format: https://cdn.simpleicons.org/{slug} or /{slug}/{hexColor}
+ */
+function getIconUrl(tech: Technology): string {
+  const base = `https://cdn.simpleicons.org/${tech.icon}`;
+  return tech.color ? `${base}/${tech.color}` : base;
+}
 
+// --- Tech Card ---
+function TechCard({ tech }: { tech: Technology }) {
+  return (
+    <div className="flex items-center gap-3 px-5 py-3 rounded-2xl border border-purple-900/30 bg-[#110822] shadow-sm hover:shadow-md hover:shadow-xeios/10 hover:border-xeios/30 hover:-translate-y-1 transition-all duration-300 group cursor-default select-none shrink-0">
+      <div className="w-8 h-8 flex items-center justify-center">
+        <img
+          src={getIconUrl(tech)}
+          alt={tech.name}
+          width={28}
+          height={28}
+          className="w-7 h-7 object-contain group-hover:scale-110 transition-transform duration-300"
+          loading="lazy"
+        />
+      </div>
+      <span className="text-sm font-semibold text-gray-300 group-hover:text-xeios transition-colors duration-300 whitespace-nowrap">
+        {tech.name}
+      </span>
+    </div>
+  );
+}
+
+// --- Marquee Row ---
+function MarqueeRow({
+  technologies,
+  direction = "left",
+  duration = 35,
+}: {
+  technologies: Technology[];
+  direction?: "left" | "right";
+  duration?: number;
+}) {
+  // Duplicate content for seamless loop
+  const items = [...technologies, ...technologies];
+
+  return (
+    <div className="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+      <motion.div
+        className="flex gap-4 shrink-0"
+        animate={{
+          x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
+        }}
+        transition={{
+          x: {
+            duration,
+            repeat: Infinity,
+            ease: "linear",
+          },
+        }}
+      >
+        {items.map((tech, i) => (
+          <TechCard key={`${tech.name}-${i}`} tech={tech} />
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+// --- Row Labels ---
+const ROW_LABELS = ["AI & Machine Learning", "Web & Mobile", "DevOps & Cloud"];
+
+// --- Main Component ---
 export default function Technologies() {
-    return (
-        <section id="technologies" className="py-24 bg-gray-50 relative overflow-hidden">
-            <div className="container mx-auto px-4 text-center relative z-10 w-full">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false, amount: 0.3 }}
-                    transition={{ duration: 0.5 }}
-                    className="mb-12"
-                >
-                    <h2 className="text-3xl md:text-5xl font-bold mt-4 text-gray-900 mb-6">
-                        Our <span className="text-xeios">MVP development</span> technologies
-                    </h2>
-                    <p className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
-                        We've worked on various product in various industries that highlight our MVP development
-                        expertise using the following tech stack:
-                    </p>
-                </motion.div>
+  return (
+    <section
+      id="technologies"
+      className="relative py-28 bg-[#0A0118] overflow-hidden"
+    >
+      {/* Subtle top border line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/15 to-transparent" />
 
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: false, amount: 0.1 }}
-                    className="flex flex-wrap lg:flex-nowrap justify-center gap-4 md:gap-3 xl:gap-6 items-center w-full max-w-[1400px] mx-auto overflow-x-visible"
-                >
-                    {technologies.map((tech) => (
-                        <motion.div
-                            key={tech.name}
-                            variants={itemVariants}
-                            whileHover={{ scale: 1.1, y: -5 }}
-                            className="flex flex-col items-center gap-3 group cursor-pointer w-full md:w-32"
-                        >
-                            <div className="relative w-20 h-20 md:w-24 md:h-24 bg-white rounded-2xl flex items-center justify-center shadow-sm transition-all duration-300 p-[2px] overflow-hidden">
-                                {/* Gradient Border Layer */}
-                                <div className="absolute inset-0 bg-transparent group-hover:bg-gradient-to-tr group-hover:from-xeios group-hover:to-xeios-light transition-all duration-300" />
+      <div className="container mx-auto px-6 relative z-10">
+        {/* Section Header */}
+        <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-20">
+          {/* Heading */}
+          <motion.h2
+            className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter text-white leading-none"
+            variants={fadeUp}
+            custom={0}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            Technologies We{" "}
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-xeios via-purple-500 to-xeios-dark">
+              Master
+            </span>
+          </motion.h2>
 
-                                {/* Inner White Box */}
-                                <div className="absolute inset-[2px] bg-white rounded-[14px] flex items-center justify-center z-10">
-                                    <div className="relative w-10 h-10 md:w-12 md:h-12 transition-transform duration-300 group-hover:scale-110">
-                                        <img
-                                            src={`https://cdn.simpleicons.org/${tech.icon}`}
-                                            alt={tech.name}
-                                            className="w-full h-full object-contain"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <span className="text-xs md:text-sm font-medium text-gray-500 group-hover:text-xeios transition-colors duration-300 group-hover:font-bold">
-                                {tech.name}
-                            </span>
-                        </motion.div>
-                    ))}
-                </motion.div>
-            </div>
-        </section>
-    );
+          {/* Sub heading */}
+          <motion.p
+            className="mt-5 text-gray-400 text-lg sm:text-xl"
+            variants={fadeUp}
+            custom={0.1}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            25+ technologies powering AI, web, mobile, and cloud solutions.
+          </motion.p>
+        </div>
+
+        {/* Marquee Rows */}
+        <div className="flex flex-col gap-8">
+          {[row1, row2, row3].map((row, index) => (
+            <motion.div
+              key={ROW_LABELS[index]}
+              variants={fadeUp}
+              custom={0.3 + index * 0.15}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              {/* Row label */}
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-3 text-center">
+                {ROW_LABELS[index]}
+              </p>
+              <MarqueeRow
+                technologies={row}
+                direction={index % 2 === 0 ? "left" : "right"}
+                duration={index === 0 ? 30 : index === 1 ? 35 : 28}
+              />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }

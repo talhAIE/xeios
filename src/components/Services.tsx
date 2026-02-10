@@ -63,7 +63,7 @@ const itemVariants = {
 
 export default function Services() {
     return (
-        <section id="services" className="py-24 bg-gray-50">
+        <section id="services" className="py-24 bg-[#0A0118]">
             <div className="container mx-auto px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -72,7 +72,7 @@ export default function Services() {
                     className="text-center mb-16"
                 >
                     <span className="text-xeios font-bold text-xl tracking-wide">OUR EXPERTISE</span>
-                    <h2 className="text-4xl md:text-5xl font-bold mt-2 text-gray-900">
+                    <h2 className="text-4xl md:text-5xl font-bold mt-2 text-white">
                         Comprehensive <span className="text-transparent bg-clip-text bg-gradient-to-r from-xeios via-purple-600 to-xeios-dark">AI Capabilities</span>
                     </h2>
                 </motion.div>
@@ -92,7 +92,7 @@ export default function Services() {
                             className="group relative h-96 rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300 border border-transparent hover:border-xeios/50"
                         >
                             {/* Loading Skeleton / Shimmer Background (Visible while image loads or as effect) */}
-                            <div className="absolute inset-0 bg-gray-200 animate-pulse z-0" />
+                            <div className="absolute inset-0 bg-[#110822] animate-pulse z-0" />
 
                             {/* Background Image */}
                             <Image
