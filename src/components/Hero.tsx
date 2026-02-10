@@ -53,7 +53,7 @@ export default function Hero() {
             className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24"
         >
             {/* Abstract Background */}
-            <div className="absolute inset-0 z-0 bg-[#0A0118]">
+            <div className="absolute inset-0 z-0 bg-background">
                 <ParticleCanvas
                     particleColor="rgba(167, 100, 220, 0.6)"
                     lineColor="rgba(103, 44, 141, 0.5)"
@@ -70,7 +70,7 @@ export default function Hero() {
             <div className="container mx-auto px-6 relative z-10 text-center">
                 {/* Animated Heading — replays on scroll */}
                 <motion.h1
-                    className="text-6xl md:text-8xl font-bold tracking-tight mb-8 text-white overflow-hidden"
+                    className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 text-white overflow-hidden"
                     variants={containerVariants}
                     initial="hidden"
                     whileInView="visible"
@@ -100,7 +100,7 @@ export default function Hero() {
 
                 {/* Subheading */}
                 <motion.p
-                    className="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed"
+                    className="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed"
                     variants={fadeUp}
                     custom={0.7}
                     initial="hidden"
@@ -140,6 +140,7 @@ export default function Hero() {
                 animate={{ opacity: 1, y: [0, 10, 0] }}
                 transition={{ delay: 1, duration: 2, repeat: Infinity }}
                 className="absolute bottom-10 left-1/2 -translate-x-1/2 text-gray-500"
+                aria-hidden="true"
             >
                 <div className="w-6 h-10 border-2 border-gray-600 rounded-full flex justify-center p-1">
                     <div className="w-1 h-2 bg-gray-500 rounded-full" />

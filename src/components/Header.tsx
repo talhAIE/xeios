@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
@@ -20,15 +20,43 @@ const navLinks = [
 export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const lastScrollY = useRef(0);
+
+    // Throttled scroll handler to avoid excessive re-renders
+    const handleScroll = useCallback(() => {
+        const currentY = window.scrollY;
+        if (Math.abs(currentY - lastScrollY.current) < 5) return;
+        lastScrollY.current = currentY;
+        setIsScrolled(currentY > 50);
+    }, []);
 
     useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
+        let ticking = false;
+        const onScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    handleScroll();
+                    ticking = false;
+                });
+                ticking = true;
+            }
         };
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [handleScroll]);
+
+    // Lock body scroll when mobile menu is open
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isMobileMenuOpen]);
 
     return (
         <header
@@ -38,6 +66,7 @@ export default function Header() {
                     ? "bg-white/70 backdrop-blur-md border-b border-gray-100/40 py-2 shadow-sm"
                     : "bg-white/70 backdrop-blur-md border-b border-gray-100/40 py-3"
             )}
+            role="banner"
         >
             <div className="container mx-auto px-6 flex items-center justify-between">
                 <Link href="/" className="flex items-center group">
@@ -56,7 +85,7 @@ export default function Header() {
                 </Link>
 
                 {/* Desktop Navigation */}
-                <nav className="hidden md:flex items-center gap-8">
+                <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
@@ -91,8 +120,11 @@ export default function Header() {
 
                 {/* Mobile Menu Button */}
                 <button
-                    className="md:hidden text-gray-600 hover:text-xeios"
+                    className="md:hidden text-gray-600 hover:text-xeios p-2"
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                    aria-expanded={isMobileMenuOpen}
+                    aria-controls="mobile-menu"
                 >
                     {isMobileMenuOpen ? <X /> : <Menu />}
                 </button>
@@ -102,6 +134,9 @@ export default function Header() {
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
+                        id="mobile-menu"
+                        role="navigation"
+                        aria-label="Mobile navigation"
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}

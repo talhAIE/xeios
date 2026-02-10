@@ -9,7 +9,7 @@ import Testimonials from "@/components/Testimonials";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#0A0118] text-white selection:bg-xeios/30 selection:text-white overflow-hidden">
+    <main className="min-h-screen bg-background text-white selection:bg-xeios/30 selection:text-white overflow-hidden">
       <Header />
       <Hero />
       <About />

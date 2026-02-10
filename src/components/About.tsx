@@ -9,7 +9,7 @@ import ElectricCanvas from "@/components/ui/electric-canvas";
 
 export default function About() {
     return (
-        <section id="about" className="py-24 bg-[#0A0118] relative overflow-hidden">
+        <section id="about" className="py-16 md:py-24 bg-background relative overflow-hidden">
             <div className="container mx-auto px-6">
                 <div className="grid md:grid-cols-[3fr_2fr] gap-12 items-center">
                     {/* Text Content — wrapped in interactive glow border */}
@@ -49,19 +49,19 @@ export default function About() {
                         </GlowCard>
                     </motion.div>
 
-                    {/* Image Placeholder */}
+                    {/* 3D Robot — responsive height, mobile fallback */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="relative h-[500px] w-full flex items-center justify-center"
+                        className="relative h-[350px] sm:h-[400px] md:h-[500px] w-full flex items-center justify-center"
                     >
                         <Spotlight
                             className="-top-40 left-0 md:left-60 md:-top-20"
                             fill="#672C8D"
                         />
-                        <div className="w-full h-full absolute inset-0">
+                        <div className="w-full h-full absolute inset-0" aria-label="3D robot animation">
                             <SplineScene
                                 scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
                                 className="w-full h-full"

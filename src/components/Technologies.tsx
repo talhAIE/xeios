@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion, Variants } from "framer-motion";
 
 // --- Types ---
@@ -8,12 +9,11 @@ interface Technology {
   /** Simple Icons slug — used to load from cdn.simpleicons.org/{slug} */
   icon: string;
   /** Optional hex color override (no #). Used for icons whose brand color is
-   *  white/invisible on a white background. */
+   *  white/invisible on a dark background. */
   color?: string;
 }
 
 // --- Technology Data (split into 3 rows for the marquee) ---
-// Color overrides are only needed when the brand color is white or too light.
 const row1: Technology[] = [
   { name: "LangGraph", icon: "langchain" },
   { name: "LangChain", icon: "langchain" },
@@ -58,10 +58,7 @@ const fadeUp: Variants = {
   }),
 };
 
-/**
- * Build the CDN URL for a Simple Icons icon.
- * Format: https://cdn.simpleicons.org/{slug} or /{slug}/{hexColor}
- */
+/** Build the CDN URL for a Simple Icons icon. */
 function getIconUrl(tech: Technology): string {
   const base = `https://cdn.simpleicons.org/${tech.icon}`;
   return tech.color ? `${base}/${tech.color}` : base;
@@ -70,15 +67,18 @@ function getIconUrl(tech: Technology): string {
 // --- Tech Card ---
 function TechCard({ tech }: { tech: Technology }) {
   return (
-    <div className="flex items-center gap-3 px-5 py-3 rounded-2xl border border-purple-900/30 bg-[#110822] shadow-sm hover:shadow-md hover:shadow-xeios/10 hover:border-xeios/30 hover:-translate-y-1 transition-all duration-300 group cursor-default select-none shrink-0">
+    <div className="flex items-center gap-3 px-5 py-3 rounded-2xl border border-purple-900/30 bg-surface shadow-sm hover:shadow-md hover:shadow-xeios/10 hover:border-xeios/30 hover:-translate-y-1 transition-all duration-300 group cursor-default select-none shrink-0">
       <div className="w-8 h-8 flex items-center justify-center">
+        {/* Using native img for external CDN icons — next/image requires
+            adding cdn.simpleicons.org to remotePatterns which is fragile */}
         <img
           src={getIconUrl(tech)}
-          alt={tech.name}
+          alt=""
           width={28}
           height={28}
           className="w-7 h-7 object-contain group-hover:scale-110 transition-transform duration-300"
           loading="lazy"
+          aria-hidden="true"
         />
       </div>
       <span className="text-sm font-semibold text-gray-300 group-hover:text-xeios transition-colors duration-300 whitespace-nowrap">
@@ -93,28 +93,33 @@ function MarqueeRow({
   technologies,
   direction = "left",
   duration = 35,
+  paused = false,
 }: {
   technologies: Technology[];
   direction?: "left" | "right";
   duration?: number;
+  paused?: boolean;
 }) {
-  // Duplicate content for seamless loop
   const items = [...technologies, ...technologies];
 
   return (
-    <div className="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+    <div
+      className="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
+      role="marquee"
+      aria-label={`Scrolling technology icons`}
+    >
       <motion.div
         className="flex gap-4 shrink-0"
-        animate={{
-          x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
-        }}
-        transition={{
-          x: {
-            duration,
-            repeat: Infinity,
-            ease: "linear",
-          },
-        }}
+        animate={
+          paused
+            ? { x: "0%" }
+            : { x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"] }
+        }
+        transition={
+          paused
+            ? { duration: 0 }
+            : { x: { duration, repeat: Infinity, ease: "linear" } }
+        }
       >
         {items.map((tech, i) => (
           <TechCard key={`${tech.name}-${i}`} tech={tech} />
@@ -129,20 +134,29 @@ const ROW_LABELS = ["AI & Machine Learning", "Web & Mobile", "DevOps & Cloud"];
 
 // --- Main Component ---
 export default function Technologies() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   return (
     <section
       id="technologies"
-      className="relative py-28 bg-[#0A0118] overflow-hidden"
+      className="relative py-16 md:py-28 bg-background overflow-hidden"
     >
       {/* Subtle top border line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/15 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/15 to-transparent" aria-hidden="true" />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-20">
-          {/* Heading */}
           <motion.h2
-            className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter text-white leading-none"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white leading-none"
             variants={fadeUp}
             custom={0}
             initial="hidden"
@@ -155,9 +169,8 @@ export default function Technologies() {
             </span>
           </motion.h2>
 
-          {/* Sub heading */}
           <motion.p
-            className="mt-5 text-gray-400 text-lg sm:text-xl"
+            className="mt-5 text-gray-400 text-base sm:text-lg md:text-xl"
             variants={fadeUp}
             custom={0.1}
             initial="hidden"
@@ -179,7 +192,6 @@ export default function Technologies() {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              {/* Row label */}
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-3 text-center">
                 {ROW_LABELS[index]}
               </p>
@@ -187,6 +199,7 @@ export default function Technologies() {
                 technologies={row}
                 direction={index % 2 === 0 ? "left" : "right"}
                 duration={index === 0 ? 30 : index === 1 ? 35 : 28}
+                paused={prefersReducedMotion}
               />
             </motion.div>
           ))}

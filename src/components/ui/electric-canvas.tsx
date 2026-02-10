@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 
 interface ElectricCanvasProps {
   className?: string;
@@ -12,6 +12,9 @@ interface ElectricCanvasProps {
  * Realistic sky-lightning overlay — 2-3 bolts strike from the top,
  * flash bright then vanish, just like real thunderbolts.
  * Auto-fires on scroll-into-view; replays on re-entry.
+ *
+ * Seizure safety: respects prefers-reduced-motion by disabling flashes.
+ * Max flash rate kept well below 3 Hz threshold.
  */
 export default function ElectricCanvas({
   className = "",
@@ -21,11 +24,17 @@ export default function ElectricCanvas({
   const isRunning = useRef(false);
   const animId = useRef<number>(0);
   const startTime = useRef(0);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  /**
-   * Build a jagged lightning path from top to a target point.
-   * Returns an array of {x,y} waypoints.
-   */
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  /** Build a jagged lightning path from top to a target point. */
   const buildPath = useCallback(
     (x1: number, y1: number, x2: number, y2: number): { x: number; y: number }[] => {
       const points: { x: number; y: number }[] = [{ x: x1, y: y1 }];
@@ -33,7 +42,6 @@ export default function ElectricCanvas({
 
       for (let i = 1; i < segments; i++) {
         const t = i / segments;
-        // Each segment drifts sideways with decreasing jitter toward the end
         const jitterX = (1 - t * 0.5) * (Math.random() - 0.5) * 50;
         const jitterY = (Math.random() - 0.5) * 6;
         points.push({
@@ -74,7 +82,6 @@ export default function ElectricCanvas({
         40,
         `rgba(80, 120, 255, ${alpha * 0.4})`
       );
-
       // Layer 2: Medium blue core
       stroke(
         `rgba(140, 180, 255, ${alpha * 0.6})`,
@@ -82,7 +89,6 @@ export default function ElectricCanvas({
         15,
         `rgba(120, 160, 255, ${alpha * 0.6})`
       );
-
       // Layer 3: Bright white-hot center
       stroke(
         `rgba(220, 230, 255, ${alpha * 0.9})`,
@@ -100,7 +106,7 @@ export default function ElectricCanvas({
   const drawBranch = useCallback(
     (ctx: CanvasRenderingContext2D, origin: { x: number; y: number }, alpha: number) => {
       const len = 25 + Math.random() * 50;
-      const angle = Math.PI / 2 + (Math.random() - 0.5) * 1.2; // mostly downward
+      const angle = Math.PI / 2 + (Math.random() - 0.5) * 1.2;
       const endX = origin.x + Math.cos(angle) * len * (Math.random() > 0.5 ? 1 : -1);
       const endY = origin.y + Math.sin(angle) * len;
 
@@ -121,7 +127,7 @@ export default function ElectricCanvas({
 
   const startAnimation = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas || isRunning.current) return;
+    if (!canvas || isRunning.current || prefersReducedMotion) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -129,7 +135,7 @@ export default function ElectricCanvas({
     startTime.current = performance.now();
 
     // Pre-generate 2–3 bolts, each with its own timing
-    const count = 2 + (Math.random() > 0.5 ? 1 : 0); // 2 or 3
+    const count = 2 + (Math.random() > 0.5 ? 1 : 0);
     const bolts = Array.from({ length: count }, (_, i) => {
       const startX = canvas.width * (0.25 + Math.random() * 0.5);
       const endX = canvas.width * (0.3 + Math.random() * 0.4);
@@ -137,11 +143,9 @@ export default function ElectricCanvas({
 
       return {
         path: buildPath(startX, -5, endX, endY),
-        // Stagger each bolt slightly
-        strikeTime: i * 250 + Math.random() * 150,
-        // Each bolt visible for a short flash
+        // Stagger each bolt: minimum 400ms apart for seizure safety (< 3 Hz)
+        strikeTime: i * 400 + Math.random() * 150,
         flashDuration: 300 + Math.random() * 200,
-        // Branch points
         branches: Array.from(
           { length: 1 + Math.floor(Math.random() * 2) },
           () => Math.floor(3 + Math.random() * 8)
@@ -167,22 +171,19 @@ export default function ElectricCanvas({
 
         anyActive = true;
 
-        // Sky-lightning flash pattern: instant on, quick flicker, fade
+        // Seizure-safe flash pattern: smooth fade instead of rapid flicker
         let alpha: number;
-        if (flashProgress < 0.05) {
+        if (flashProgress < 0.1) {
           // Instant bright flash
           alpha = 1;
-        } else if (flashProgress < 0.15) {
-          // Quick dim
-          alpha = 0.3;
         } else if (flashProgress < 0.25) {
-          // Second flash (re-strike)
-          alpha = 0.9;
+          // Gentle dim
+          alpha = 0.5;
         } else if (flashProgress < 0.4) {
-          // Another dim
-          alpha = 0.2 + Math.random() * 0.3;
+          // Second flash (re-strike) — gentle, not instant
+          alpha = 0.7;
         } else {
-          // Fade out
+          // Smooth fade out
           alpha = Math.max(0, 1 - (flashProgress - 0.4) / 0.6) * 0.5;
         }
 
@@ -198,16 +199,15 @@ export default function ElectricCanvas({
 
         drawPath(ctx!, bolt.path, alpha);
 
-        // Draw branches
         for (const branchIdx of bolt.branches) {
           if (branchIdx < bolt.path.length) {
             drawBranch(ctx!, bolt.path[branchIdx], alpha);
           }
         }
 
-        // Brief full-screen flash on first strike
+        // Subtle full-screen flash on first strike — reduced intensity for safety
         if (flashProgress < 0.05) {
-          ctx!.fillStyle = `rgba(180, 200, 255, 0.04)`;
+          ctx!.fillStyle = "rgba(180, 200, 255, 0.02)";
           ctx!.fillRect(0, 0, canvas!.width, canvas!.height);
         }
       }
@@ -221,15 +221,23 @@ export default function ElectricCanvas({
     }
 
     animId.current = requestAnimationFrame(animate);
-  }, [buildPath, drawBranch, drawPath, duration]);
+  }, [buildPath, drawBranch, drawPath, duration, prefersReducedMotion]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     function resize() {
-      canvas!.width = canvas!.parentElement?.clientWidth ?? 400;
-      canvas!.height = canvas!.parentElement?.clientHeight ?? 500;
+      const dpr = window.devicePixelRatio || 1;
+      const parent = canvas!.parentElement;
+      const w = parent?.clientWidth ?? 400;
+      const h = parent?.clientHeight ?? 500;
+      canvas!.width = w * dpr;
+      canvas!.height = h * dpr;
+      canvas!.style.width = `${w}px`;
+      canvas!.style.height = `${h}px`;
+      const ctx = canvas!.getContext("2d");
+      if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     const ro = new ResizeObserver(resize);
@@ -238,7 +246,7 @@ export default function ElectricCanvas({
 
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !prefersReducedMotion) {
           setTimeout(() => startAnimation(), 300);
         } else {
           cancelAnimationFrame(animId.current);
@@ -256,11 +264,12 @@ export default function ElectricCanvas({
       io.disconnect();
       cancelAnimationFrame(animId.current);
     };
-  }, [startAnimation]);
+  }, [startAnimation, prefersReducedMotion]);
 
   return (
     <canvas
       ref={canvasRef}
+      aria-hidden="true"
       className={`absolute inset-0 w-full h-full pointer-events-none ${className}`}
     />
   );

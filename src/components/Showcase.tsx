@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { ArrowLeft, ArrowRight, Layers } from "lucide-react";
 import Image from "next/image";
@@ -14,6 +14,7 @@ const projects = [
     image:
       "https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1200&q=80",
     tags: ["Python", "TensorFlow", "React"],
+    href: "#contact",
   },
   {
     title: "Quest Hunter GO - Interactive Adventure",
@@ -22,6 +23,7 @@ const projects = [
     image:
       "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80",
     tags: ["Unity", "C#", "Blender"],
+    href: "#contact",
   },
   {
     title: "Virtual World - VR History Experience",
@@ -30,6 +32,7 @@ const projects = [
     image:
       "https://images.unsplash.com/photo-1478416272538-5f7e51dc5400?auto=format&fit=crop&w=1200&q=80",
     tags: ["Unity", "C#", "VR SDK"],
+    href: "#contact",
   },
   {
     title: "QHELO - Sports Social Platform",
@@ -38,6 +41,7 @@ const projects = [
     image:
       "https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=1200&q=80",
     tags: ["React Native", "Node.js", "PostgreSQL"],
+    href: "#contact",
   },
   {
     title: "Sports E-commerce Platform",
@@ -46,6 +50,7 @@ const projects = [
     image:
       "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=1200&q=80",
     tags: ["React", "Node.js", "PostgreSQL"],
+    href: "#contact",
   },
   {
     title: "Chatterly - No-code AI Builder",
@@ -54,6 +59,7 @@ const projects = [
     image:
       "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1200&q=80",
     tags: ["React", "Node.js", "PostgreSQL"],
+    href: "#contact",
   },
 ];
 
@@ -100,26 +106,77 @@ const contentItem: Variants = {
 export default function Showcase() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  const touchStartX = useRef<number | null>(null);
 
   const project = projects[currentIndex];
 
-  const navigate = (newIndex: number) => {
-    setDirection(newIndex > currentIndex ? 1 : -1);
-    setCurrentIndex(newIndex);
+  const navigate = useCallback(
+    (newIndex: number) => {
+      setDirection(newIndex > currentIndex ? 1 : -1);
+      setCurrentIndex(newIndex);
+    },
+    [currentIndex]
+  );
+
+  const next = useCallback(
+    () => navigate((currentIndex + 1) % projects.length),
+    [currentIndex, navigate]
+  );
+  const prev = useCallback(
+    () => navigate((currentIndex - 1 + projects.length) % projects.length),
+    [currentIndex, navigate]
+  );
+
+  // Keyboard navigation when section is focused
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        next();
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        prev();
+      }
+    };
+
+    section.addEventListener("keydown", handleKeyDown);
+    return () => section.removeEventListener("keydown", handleKeyDown);
+  }, [next, prev]);
+
+  // Swipe gesture support
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
   };
 
-  const next = () => navigate((currentIndex + 1) % projects.length);
-  const prev = () =>
-    navigate((currentIndex - 1 + projects.length) % projects.length);
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    const minSwipe = 50;
+    if (Math.abs(diff) > minSwipe) {
+      if (diff > 0) next();
+      else prev();
+    }
+    touchStartX.current = null;
+  };
 
   return (
     <section
+      ref={sectionRef}
       id="showcase"
-      className="relative py-28 bg-[#0A0118] overflow-hidden"
+      className="relative py-16 md:py-28 bg-background overflow-hidden"
+      tabIndex={0}
+      aria-label="Project showcase carousel"
+      role="region"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {/* Ambient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-purple-900/10 via-[#0A0118] to-[#0A0118] pointer-events-none" />
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/15 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-purple-900/10 via-background to-background pointer-events-none" aria-hidden="true" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/15 to-transparent" aria-hidden="true" />
 
       <div className="relative z-10 container mx-auto px-6">
         {/* ── Header Row ── */}
@@ -133,7 +190,7 @@ export default function Showcase() {
         >
           <div>
             <motion.h2
-              className="text-4xl sm:text-5xl font-black tracking-tight text-white leading-tight"
+              className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-tight"
               variants={fadeUp}
               custom={0}
             >
@@ -163,7 +220,10 @@ export default function Showcase() {
         </motion.div>
 
         {/* ── Project Card ── */}
-        <div className="relative min-h-[480px] md:min-h-[440px]">
+        <div
+          className="relative min-h-[480px] md:min-h-[440px]"
+          aria-live="polite"
+        >
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={currentIndex}
@@ -179,22 +239,20 @@ export default function Showcase() {
               }}
               className="absolute inset-0"
             >
-              <div className="h-full bg-[#110822] rounded-3xl overflow-hidden border border-purple-900/30 shadow-2xl shadow-purple-950/20 flex flex-col lg:flex-row">
+              <div className="h-full bg-surface rounded-3xl overflow-hidden border border-purple-900/30 shadow-2xl shadow-purple-950/20 flex flex-col lg:flex-row">
                 {/* Left: Content */}
                 <motion.div
-                  className="lg:w-1/2 p-8 md:p-12 flex flex-col justify-center relative"
+                  className="lg:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col justify-center relative"
                   variants={contentStagger}
                   initial="hidden"
                   animate="visible"
                 >
-                  {/* Icon */}
                   <motion.div variants={contentItem}>
                     <div className="w-10 h-10 rounded-xl bg-xeios/10 border border-xeios/20 flex items-center justify-center mb-5">
                       <Layers className="w-5 h-5 text-xeios" />
                     </div>
                   </motion.div>
 
-                  {/* Category breadcrumb */}
                   <motion.p
                     className="text-gray-500 text-sm mb-3 tracking-wide"
                     variants={contentItem}
@@ -209,33 +267,33 @@ export default function Showcase() {
                     ))}
                   </motion.p>
 
-                  {/* Title */}
                   <motion.h3
-                    className="text-2xl md:text-3xl font-black text-white tracking-tight mb-4 leading-tight"
+                    className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight mb-4 leading-tight"
                     variants={contentItem}
                   >
                     {project.title}
                   </motion.h3>
 
-                  {/* Description */}
                   <motion.p
-                    className="text-gray-400 text-sm md:text-base leading-relaxed mb-8"
+                    className="text-gray-400 text-sm md:text-base leading-relaxed mb-8 line-clamp-4 sm:line-clamp-none"
                     variants={contentItem}
                   >
                     {project.desc}
                   </motion.p>
 
-                  {/* View Project Button */}
                   <motion.div variants={contentItem}>
-                    <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-xeios/40 text-xeios hover:bg-xeios hover:text-white transition-all duration-300 text-sm font-semibold group">
+                    <Link
+                      href={project.href}
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-xeios/40 text-xeios hover:bg-xeios hover:text-white transition-all duration-300 text-sm font-semibold group"
+                    >
                       View Project
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                    </button>
+                    </Link>
                   </motion.div>
                 </motion.div>
 
                 {/* Right: Image */}
-                <div className="relative lg:w-1/2 h-60 sm:h-72 lg:h-auto bg-[#1A0E2E] overflow-hidden">
+                <div className="relative lg:w-1/2 h-48 sm:h-60 md:h-72 lg:h-auto bg-surface-highlight overflow-hidden">
                   <Image
                     src={project.image}
                     alt={project.title}
@@ -243,8 +301,7 @@ export default function Showcase() {
                     className="object-cover transition-transform duration-700 ease-out hover:scale-105"
                     sizes="(max-width: 1024px) 100vw, 50vw"
                   />
-                  {/* Subtle gradient overlay on image edge */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#110822]/40 via-transparent to-transparent pointer-events-none lg:block hidden" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-surface/40 via-transparent to-transparent pointer-events-none lg:block hidden" />
                 </div>
               </div>
             </motion.div>
@@ -252,10 +309,10 @@ export default function Showcase() {
         </div>
 
         {/* ── Bottom Navigation: arrows + dots ── */}
-        <div className="flex items-center justify-center gap-4 mt-10">
+        <div className="flex items-center justify-center gap-4 mt-10" role="tablist" aria-label="Project navigation">
           <motion.button
             onClick={prev}
-            className="w-11 h-11 rounded-full border border-purple-900/30 bg-[#110822] text-gray-300 flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-300"
+            className="w-11 h-11 rounded-full border border-purple-900/30 bg-surface text-gray-300 flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-300"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Previous project"
@@ -264,24 +321,35 @@ export default function Showcase() {
           </motion.button>
 
           <div className="flex items-center gap-2">
-            {projects.map((_, idx) => (
+            {projects.map((p, idx) => (
               <motion.button
                 key={idx}
+                role="tab"
+                aria-selected={idx === currentIndex}
                 onClick={() => navigate(idx)}
-                className={`rounded-full transition-all duration-400 ${
+                className={`rounded-full transition-all duration-400 min-w-[44px] min-h-[44px] flex items-center justify-center ${
                   idx === currentIndex
-                    ? "w-8 h-3 bg-white shadow-[0_2px_8px_rgba(255,255,255,0.2)]"
-                    : "w-3 h-3 bg-white/20 hover:bg-white/40"
+                    ? "bg-white shadow-[0_2px_8px_rgba(255,255,255,0.2)]"
+                    : "bg-transparent hover:bg-white/10"
                 }`}
-                whileHover={{ scale: 1.3 }}
-                aria-label={`Go to project ${idx + 1}`}
-              />
+                whileHover={{ scale: 1.1 }}
+                aria-label={`Go to project: ${p.title}`}
+              >
+                {/* Visual dot indicator inside the touch target */}
+                <span
+                  className={`rounded-full transition-all duration-300 ${
+                    idx === currentIndex
+                      ? "w-8 h-3 bg-white"
+                      : "w-3 h-3 bg-white/20"
+                  }`}
+                />
+              </motion.button>
             ))}
           </div>
 
           <motion.button
             onClick={next}
-            className="w-11 h-11 rounded-full border border-purple-900/30 bg-[#110822] text-gray-300 flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-300"
+            className="w-11 h-11 rounded-full border border-purple-900/30 bg-surface text-gray-300 flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-300"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Next project"

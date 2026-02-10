@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion, Variants } from "framer-motion";
 import Link from "next/link";
 import {
@@ -10,6 +11,7 @@ import {
   Facebook,
   Instagram,
   Linkedin,
+  CheckCircle2,
 } from "lucide-react";
 
 const fadeUp: Variants = {
@@ -38,7 +40,39 @@ const services = [
   "Data Analytics",
 ];
 
+type FormStatus = "idle" | "submitting" | "success" | "error";
+
 export default function Contact() {
+  const [status, setStatus] = useState<FormStatus>("idle");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("submitting");
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      // TODO: Replace with your actual API endpoint (e.g. /api/contact)
+      // For now, simulate a successful submission
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Log form data in development
+      if (process.env.NODE_ENV === "development") {
+        console.log("Contact form submission:", data);
+      }
+
+      setStatus("success");
+      form.reset();
+      // Reset status after 5 seconds
+      setTimeout(() => setStatus("idle"), 5000);
+    } catch {
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 5000);
+    }
+  }
+
   return (
     <>
       {/* ════════════════════════════════════════════
@@ -46,13 +80,12 @@ export default function Contact() {
          ════════════════════════════════════════════ */}
       <section
         id="contact"
-        className="relative bg-[#0A0118] pt-20 pb-24 overflow-hidden"
+        className="relative bg-background pt-16 md:pt-20 pb-16 md:pb-24 overflow-hidden"
       >
         {/* Ambient glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-xeios/10 blur-[160px] rounded-full pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-900/20 blur-[140px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-xeios/10 blur-[160px] rounded-full pointer-events-none" aria-hidden="true" />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-900/20 blur-[140px] rounded-full pointer-events-none" aria-hidden="true" />
 
-        {/* Top heading area */}
         <div className="relative z-10 container mx-auto px-6">
           <motion.div
             className="text-center mb-16"
@@ -62,13 +95,13 @@ export default function Contact() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter text-white leading-none mb-3">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-white leading-none mb-3">
               Contact{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-xeios via-purple-400 to-xeios-light">
                 Us
               </span>
             </h2>
-            <p className="text-gray-400 text-lg">
+            <p className="text-gray-400 text-base sm:text-lg">
               Start a conversation today.
             </p>
           </motion.div>
@@ -102,7 +135,7 @@ export default function Contact() {
               <div className="space-y-5 mb-10">
                 <div className="flex items-start gap-4">
                   <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-xeios" />
+                    <Mail className="w-4 h-4 text-xeios" aria-hidden="true" />
                     <span className="text-xs font-bold text-xeios uppercase tracking-wider">
                       Email Support
                     </span>
@@ -117,7 +150,7 @@ export default function Contact() {
 
                 <div className="flex items-start gap-4">
                   <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-xeios" />
+                    <Phone className="w-4 h-4 text-xeios" aria-hidden="true" />
                     <span className="text-xs font-bold text-xeios uppercase tracking-wider">
                       Let&apos;s Talk
                     </span>
@@ -134,7 +167,7 @@ export default function Contact() {
 
                 <div className="flex items-start gap-4">
                   <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-xeios" />
+                    <MapPin className="w-4 h-4 text-xeios" aria-hidden="true" />
                     <span className="text-xs font-bold text-xeios uppercase tracking-wider">
                       Head Office
                     </span>
@@ -160,7 +193,7 @@ export default function Contact() {
                       key={label}
                       href={href}
                       aria-label={label}
-                      className="w-10 h-10 rounded-full bg-xeios/10 border border-xeios/20 flex items-center justify-center text-xeios hover:bg-xeios hover:text-white transition-all duration-300"
+                      className="w-11 h-11 rounded-full bg-xeios/10 border border-xeios/20 flex items-center justify-center text-xeios hover:bg-xeios hover:text-white transition-all duration-300"
                     >
                       <Icon className="w-4 h-4" />
                     </a>
@@ -177,7 +210,10 @@ export default function Contact() {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <form className="bg-[#110822] border border-purple-900/40 rounded-2xl p-8 md:p-10 shadow-2xl shadow-xeios/5">
+              <form
+                onSubmit={handleSubmit}
+                className="bg-surface border border-purple-900/40 rounded-2xl p-6 sm:p-8 md:p-10 shadow-2xl shadow-xeios/5"
+              >
                 <h3 className="text-xl font-bold text-white mb-1">
                   Send us a message
                 </h3>
@@ -198,9 +234,9 @@ export default function Contact() {
                       id="name"
                       name="name"
                       type="text"
-                      placeholder="name"
+                      placeholder="Your name"
                       required
-                      className="w-full bg-[#1A0E2E] border border-purple-900/40 rounded-lg px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:border-xeios focus:ring-1 focus:ring-xeios/50 outline-none transition-all"
+                      className="w-full bg-surface-highlight border border-purple-900/40 rounded-lg px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:border-xeios focus:ring-1 focus:ring-xeios/50 outline-none transition-all"
                     />
                   </div>
                   <div>
@@ -214,8 +250,8 @@ export default function Contact() {
                       id="company"
                       name="company"
                       type="text"
-                      placeholder="company"
-                      className="w-full bg-[#1A0E2E] border border-purple-900/40 rounded-lg px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:border-xeios focus:ring-1 focus:ring-xeios/50 outline-none transition-all"
+                      placeholder="Your company"
+                      className="w-full bg-surface-highlight border border-purple-900/40 rounded-lg px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:border-xeios focus:ring-1 focus:ring-xeios/50 outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -233,8 +269,8 @@ export default function Contact() {
                       id="phone"
                       name="phone"
                       type="tel"
-                      placeholder="phone"
-                      className="w-full bg-[#1A0E2E] border border-purple-900/40 rounded-lg px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:border-xeios focus:ring-1 focus:ring-xeios/50 outline-none transition-all"
+                      placeholder="Your phone"
+                      className="w-full bg-surface-highlight border border-purple-900/40 rounded-lg px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:border-xeios focus:ring-1 focus:ring-xeios/50 outline-none transition-all"
                     />
                   </div>
                   <div>
@@ -248,9 +284,9 @@ export default function Contact() {
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="email"
+                      placeholder="Your email"
                       required
-                      className="w-full bg-[#1A0E2E] border border-purple-900/40 rounded-lg px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:border-xeios focus:ring-1 focus:ring-xeios/50 outline-none transition-all"
+                      className="w-full bg-surface-highlight border border-purple-900/40 rounded-lg px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:border-xeios focus:ring-1 focus:ring-xeios/50 outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -267,8 +303,8 @@ export default function Contact() {
                     id="subject"
                     name="subject"
                     type="text"
-                    placeholder="subject"
-                    className="w-full bg-[#1A0E2E] border border-purple-900/40 rounded-lg px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:border-xeios focus:ring-1 focus:ring-xeios/50 outline-none transition-all"
+                    placeholder="Subject"
+                    className="w-full bg-surface-highlight border border-purple-900/40 rounded-lg px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:border-xeios focus:ring-1 focus:ring-xeios/50 outline-none transition-all"
                   />
                 </div>
 
@@ -284,20 +320,45 @@ export default function Contact() {
                     id="message"
                     name="message"
                     rows={4}
-                    placeholder="message"
+                    placeholder="Your message"
                     required
-                    className="w-full bg-[#1A0E2E] border border-purple-900/40 rounded-lg px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:border-xeios focus:ring-1 focus:ring-xeios/50 outline-none transition-all resize-none"
+                    className="w-full bg-surface-highlight border border-purple-900/40 rounded-lg px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:border-xeios focus:ring-1 focus:ring-xeios/50 outline-none transition-all resize-none"
                   />
                 </div>
 
-                {/* Submit */}
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-xeios to-xeios-light text-white font-bold rounded-full hover:shadow-[0_0_25px_rgba(103,44,141,0.4)] hover:scale-105 transition-all duration-300"
-                >
-                  Send Message
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                {/* Submit + status */}
+                <div className="flex items-center gap-4">
+                  <button
+                    type="submit"
+                    disabled={status === "submitting"}
+                    className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-xeios to-xeios-light text-white font-bold rounded-full hover:shadow-[0_0_25px_rgba(103,44,141,0.4)] hover:scale-105 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  >
+                    {status === "submitting" ? (
+                      <>
+                        <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        Send Message
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+
+                  {status === "success" && (
+                    <span className="flex items-center gap-1.5 text-sm text-green-400">
+                      <CheckCircle2 className="w-4 h-4" />
+                      Message sent!
+                    </span>
+                  )}
+
+                  {status === "error" && (
+                    <span className="text-sm text-red-400">
+                      Failed to send. Please try again.
+                    </span>
+                  )}
+                </div>
               </form>
             </motion.div>
           </div>
@@ -307,7 +368,7 @@ export default function Contact() {
       {/* ════════════════════════════════════════════
           FOOTER
          ════════════════════════════════════════════ */}
-      <footer className="bg-[#060010] border-t border-purple-900/30 pt-16 pb-6">
+      <footer className="bg-[#060010] border-t border-purple-900/30 pt-16 pb-6" role="contentinfo">
         <div className="container mx-auto px-6">
           {/* Footer columns */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-14">
@@ -331,7 +392,7 @@ export default function Contact() {
                     key={label}
                     href="#"
                     aria-label={label}
-                    className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 hover:text-xeios hover:border-xeios/30 transition-all duration-300"
+                    className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 hover:text-xeios hover:border-xeios/30 transition-all duration-300"
                   >
                     <Icon className="w-3.5 h-3.5" />
                   </a>

@@ -93,9 +93,9 @@ const cardVariants: Variants = {
 
 export default function Services() {
     return (
-        <section id="services" className="py-24 bg-[#0A0118] relative overflow-hidden">
+        <section id="services" className="py-16 md:py-24 bg-background relative overflow-hidden">
             {/* Ambient glow */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(103,44,141,0.12)_0%,transparent_60%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(103,44,141,0.12)_0%,transparent_60%)] pointer-events-none" aria-hidden="true" />
 
             <div className="container mx-auto px-6 relative z-10">
                 {/* Section Header */}
@@ -137,7 +137,7 @@ export default function Services() {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: false, amount: 0.1 }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
                 >
                     {expertise.map((item) => (
                         <motion.div
@@ -148,10 +148,10 @@ export default function Services() {
                                 scale: 1.03,
                                 transition: { type: "spring", stiffness: 300, damping: 20 },
                             }}
-                            className="group relative h-96 rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-xeios/15 transition-shadow duration-500 border border-purple-900/20 hover:border-xeios/50"
+                            className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-xeios/15 transition-shadow duration-500 border border-purple-900/20 hover:border-xeios/50"
                         >
                             {/* Shimmer skeleton */}
-                            <div className="absolute inset-0 bg-[#110822] animate-pulse z-0" />
+                            <div className="absolute inset-0 bg-surface animate-pulse z-0" aria-hidden="true" />
 
                             {/* Background Image */}
                             <Image
@@ -159,7 +159,7 @@ export default function Services() {
                                 alt={item.title}
                                 fill
                                 className="object-cover transition-transform duration-700 group-hover:scale-110 z-10"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             />
 
                             {/* Overlay Gradient */}

@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { motion, Variants } from "framer-motion";
 import { Star, Globe } from "lucide-react";
 
@@ -87,29 +88,29 @@ const thirdColumn = testimonials.slice(6, 9);
 // --- Scrolling Column ---
 function TestimonialsColumn({
   className,
-  testimonials,
+  testimonials: items,
   duration = 10,
+  paused = false,
 }: {
   className?: string;
   testimonials: Testimonial[];
   duration?: number;
+  paused?: boolean;
 }) {
   return (
     <div className={className}>
       <motion.ul
-        animate={{ translateY: "-50%" }}
-        transition={{
-          duration,
-          repeat: Infinity,
-          ease: "linear",
-          repeatType: "loop",
-        }}
+        animate={paused ? {} : { translateY: "-50%" }}
+        transition={
+          paused
+            ? {}
+            : { duration, repeat: Infinity, ease: "linear", repeatType: "loop" }
+        }
         className="flex flex-col gap-6 pb-6 list-none m-0 p-0"
       >
-        {/* Duplicate the list for seamless infinite scroll */}
         {[0, 1].map((copyIndex) => (
           <React.Fragment key={copyIndex}>
-            {testimonials.map(({ text, image, name, role, country }, i) => (
+            {items.map(({ text, image, name, role, country }, i) => (
               <motion.li
                 key={`${copyIndex}-${i}`}
                 aria-hidden={copyIndex === 1}
@@ -121,14 +122,14 @@ function TestimonialsColumn({
                     "0 25px 50px -12px rgba(103, 44, 141, 0.12), 0 10px 10px -5px rgba(103, 44, 141, 0.04)",
                   transition: { type: "spring", stiffness: 400, damping: 17 },
                 }}
-                className="p-8 rounded-3xl border border-purple-900/30 shadow-lg shadow-xeios/5 max-w-xs w-full bg-[#110822] transition-all duration-300 cursor-default select-none group focus:outline-none focus:ring-2 focus:ring-xeios/30"
+                className="p-8 rounded-3xl border border-purple-900/30 shadow-lg shadow-xeios/5 max-w-xs w-full bg-surface transition-all duration-300 cursor-default select-none group focus:outline-none focus:ring-2 focus:ring-xeios/30"
               >
                 <blockquote className="m-0 p-0">
                   <p className="text-gray-400 leading-relaxed font-normal m-0">
                     &ldquo;{text}&rdquo;
                   </p>
                   <footer className="flex items-center gap-3 mt-6">
-                    <img
+                    <Image
                       width={40}
                       height={40}
                       src={image}
@@ -167,28 +168,36 @@ const fadeUp: Variants = {
   }),
 };
 
-// Avatar stack shown as a social-proof trust signal
 const AVATAR_STACK = testimonials.slice(0, 5).map((t) => t.image);
 
 // --- Main Exported Section ---
 export function PremiumTestimonials() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   return (
     <section
       id="testimonials"
       aria-labelledby="testimonials-heading"
-      className="relative py-28 bg-[#0A0118] overflow-hidden"
+      className="relative py-16 md:py-28 bg-background overflow-hidden"
     >
       {/* Layered ambient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-[#0A0118] to-indigo-900/10 pointer-events-none" />
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/15 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-background to-indigo-900/10 pointer-events-none" aria-hidden="true" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/15 to-transparent" aria-hidden="true" />
 
       <div className="relative z-10 container mx-auto px-6">
         {/* Section Header */}
         <div className="flex flex-col items-center justify-center max-w-3xl mx-auto mb-20">
-          {/* Heading */}
           <motion.h2
             id="testimonials-heading"
-            className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-center text-white leading-[0.9]"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black tracking-tighter text-center text-white leading-[0.9]"
             variants={fadeUp}
             custom={0.1}
             initial="hidden"
@@ -202,9 +211,8 @@ export function PremiumTestimonials() {
             </span>
           </motion.h2>
 
-          {/* Description */}
           <motion.p
-            className="text-center mt-6 text-gray-400 text-lg sm:text-xl leading-relaxed max-w-xl"
+            className="text-center mt-6 text-gray-400 text-base sm:text-lg md:text-xl leading-relaxed max-w-xl"
             variants={fadeUp}
             custom={0.2}
             initial="hidden"
@@ -215,7 +223,7 @@ export function PremiumTestimonials() {
             with our AI-driven solutions.
           </motion.p>
 
-          {/* Social proof strip: avatars + rating + countries */}
+          {/* Social proof strip */}
           <motion.div
             className="flex flex-col sm:flex-row items-center gap-5 mt-10"
             variants={fadeUp}
@@ -224,34 +232,32 @@ export function PremiumTestimonials() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {/* Stacked avatars */}
             <div className="flex -space-x-3">
               {AVATAR_STACK.map((src, i) => (
-                <img
+                <Image
                   key={i}
                   src={src}
                   alt=""
                   width={36}
                   height={36}
-                  className="h-9 w-9 rounded-full object-cover ring-2 ring-[#0A0118]"
+                  className="h-9 w-9 rounded-full object-cover ring-2 ring-background"
                 />
               ))}
-              <div className="h-9 w-9 rounded-full bg-xeios/10 ring-2 ring-[#0A0118] flex items-center justify-center text-xs font-bold text-xeios">
+              <div className="h-9 w-9 rounded-full bg-xeios/10 ring-2 ring-background flex items-center justify-center text-xs font-bold text-xeios">
                 +4
               </div>
             </div>
 
-            {/* Divider */}
-            <div className="hidden sm:block w-px h-8 bg-purple-900/30" />
+            <div className="hidden sm:block w-px h-8 bg-purple-900/30" aria-hidden="true" />
 
-            {/* Stars + rating */}
             <div className="flex items-center gap-2">
-              <div className="flex gap-0.5">
+              <div className="flex gap-0.5" aria-label="Rating: 4.9 out of 5 stars">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
                     className="h-4 w-4 fill-amber-400 text-amber-400"
                     strokeWidth={0}
+                    aria-hidden="true"
                   />
                 ))}
               </div>
@@ -261,12 +267,10 @@ export function PremiumTestimonials() {
               <span className="text-sm text-gray-500">from 500+ reviews</span>
             </div>
 
-            {/* Divider */}
-            <div className="hidden sm:block w-px h-8 bg-purple-900/30" />
+            <div className="hidden sm:block w-px h-8 bg-purple-900/30" aria-hidden="true" />
 
-            {/* Countries indicator */}
             <div className="flex items-center gap-1.5 text-sm text-gray-400">
-              <Globe className="h-4 w-4 text-xeios" />
+              <Globe className="h-4 w-4 text-xeios" aria-hidden="true" />
               <span className="font-medium">12+ countries</span>
             </div>
           </motion.div>
@@ -278,16 +282,18 @@ export function PremiumTestimonials() {
           role="region"
           aria-label="Scrolling Testimonials"
         >
-          <TestimonialsColumn testimonials={firstColumn} duration={15} />
+          <TestimonialsColumn testimonials={firstColumn} duration={15} paused={prefersReducedMotion} />
           <TestimonialsColumn
             testimonials={secondColumn}
             className="hidden md:block"
             duration={19}
+            paused={prefersReducedMotion}
           />
           <TestimonialsColumn
             testimonials={thirdColumn}
             className="hidden lg:block"
             duration={17}
+            paused={prefersReducedMotion}
           />
         </div>
       </div>
