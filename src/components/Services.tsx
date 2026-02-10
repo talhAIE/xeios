@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import Image from "next/image";
 
 const expertise = [
@@ -46,52 +46,116 @@ const expertise = [
     },
 ];
 
-const containerVariants = {
-    hidden: { opacity: 0 },
+// --- Animation Variants ---
+
+/** Header words stagger in one-by-one */
+const headerContainerVariants: Variants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+};
+
+const headerWordVariants: Variants = {
+    hidden: { opacity: 0, y: 30, filter: "blur(6px)" },
     visible: {
         opacity: 1,
-        transition: {
-            staggerChildren: 0.1,
-        },
+        y: 0,
+        filter: "blur(0px)",
+        transition: { type: "spring", damping: 20, stiffness: 120 },
     },
 };
 
-const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
+/** Card grid staggers each card */
+const gridVariants: Variants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } },
 };
+
+/** Each card scales + fades from below with blur */
+const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 60, scale: 0.92, filter: "blur(6px)" },
+    visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        transition: { type: "spring", damping: 22, stiffness: 100 },
+    },
+};
+
+const LABEL_WORDS = ["OUR", "EXPERTISE"];
+const HEADING_WORDS = ["Comprehensive"];
+const GRADIENT_TEXT = "AI Capabilities";
 
 export default function Services() {
     return (
-        <section id="services" className="py-24 bg-[#0A0118]">
+        <section id="services" className="py-24 bg-[#0A0118] overflow-hidden">
             <div className="container mx-auto px-6">
+                {/* Section Header — word-by-word stagger, replays on scroll */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false }}
                     className="text-center mb-16"
+                    variants={headerContainerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: false, amount: 0.6 }}
                 >
-                    <span className="text-xeios font-bold text-xl tracking-wide">OUR EXPERTISE</span>
-                    <h2 className="text-4xl md:text-5xl font-bold mt-2 text-white">
-                        Comprehensive <span className="text-transparent bg-clip-text bg-gradient-to-r from-xeios via-purple-600 to-xeios-dark">AI Capabilities</span>
+                    {/* Label */}
+                    <div className="flex justify-center gap-x-2 mb-2">
+                        {LABEL_WORDS.map((word) => (
+                            <motion.span
+                                key={word}
+                                className="text-xeios font-bold text-xl tracking-wide"
+                                variants={headerWordVariants}
+                            >
+                                {word}
+                            </motion.span>
+                        ))}
+                    </div>
+
+                    {/* Heading */}
+                    <h2 className="text-4xl md:text-5xl font-bold text-white flex flex-wrap justify-center gap-x-[0.3em]">
+                        {HEADING_WORDS.map((word) => (
+                            <motion.span
+                                key={word}
+                                className="inline-block"
+                                variants={headerWordVariants}
+                            >
+                                {word}
+                            </motion.span>
+                        ))}
+                        <motion.span
+                            className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-xeios via-purple-600 to-xeios-dark"
+                            variants={{
+                                hidden: { opacity: 0, y: 40, scale: 0.9, filter: "blur(10px)" },
+                                visible: {
+                                    opacity: 1,
+                                    y: 0,
+                                    scale: 1,
+                                    filter: "blur(0px)",
+                                    transition: { type: "spring", damping: 18, stiffness: 90 },
+                                },
+                            }}
+                        >
+                            {GRADIENT_TEXT}
+                        </motion.span>
                     </h2>
                 </motion.div>
 
+                {/* Cards Grid — staggered reveal, replays on scroll */}
                 <motion.div
-                    variants={containerVariants}
+                    variants={gridVariants}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: false, amount: 0.1 }}
+                    viewport={{ once: false, amount: 0.05 }}
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
                 >
                     {expertise.map((item) => (
                         <motion.div
                             key={item.title}
-                            variants={itemVariants}
-                            whileHover={{ y: -5 }}
-                            className="group relative h-96 rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300 border border-transparent hover:border-xeios/50"
+                            variants={cardVariants}
+                            whileHover={{ y: -8, scale: 1.03, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+                            className="group relative h-96 rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-xeios/15 transition-shadow duration-300 border border-white/5 hover:border-xeios/50"
                         >
-                            {/* Loading Skeleton / Shimmer Background (Visible while image loads or as effect) */}
+                            {/* Loading Skeleton */}
                             <div className="absolute inset-0 bg-[#110822] animate-pulse z-0" />
 
                             {/* Background Image */}
@@ -106,22 +170,17 @@ export default function Services() {
                             {/* Overlay Gradient */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent z-20" />
 
-                            {/* Content */}
-                            <div className="absolute bottom-0 left-0 right-0 p-6 z-30 bg-white/5 backdrop-blur-md border-t border-white/10 group-hover:bg-white/10 transition-colors duration-300">
-                                <motion.h3
-                                    className="text-xl font-bold text-white mb-2"
-                                >
+                            {/* Content — slides up on hover */}
+                            <div className="absolute bottom-0 left-0 right-0 p-6 z-30 bg-white/5 backdrop-blur-md border-t border-white/10 group-hover:bg-white/10 transition-all duration-300 translate-y-0 group-hover:-translate-y-1">
+                                <h3 className="text-xl font-bold text-white mb-2">
                                     {item.title}
-                                </motion.h3>
-                                <motion.p
-                                    className="text-sm text-gray-200 line-clamp-2"
-                                >
+                                </h3>
+                                <p className="text-sm text-gray-200 line-clamp-2">
                                     {item.desc}
-                                </motion.p>
+                                </p>
                             </div>
 
-
-                            {/* Hover Border Glow Animation */}
+                            {/* Hover Border Glow */}
                             <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-xeios/50 transition-colors duration-300 pointer-events-none z-40" />
                             <div className="absolute inset-0 rounded-2xl ring-1 ring-white/10 group-hover:ring-xeios/30 z-50 pointer-events-none transition-all duration-500" />
                         </motion.div>
