@@ -25,19 +25,19 @@ export default function About() {
                             className="!aspect-auto !grid-rows-none !shadow-none p-6 md:p-8 lg:p-12 w-full h-fit border-white/5 bg-background/20"
                         >
                             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 md:mb-6 text-white leading-tight">
-                                Bridging <span className="text-purple-500">Complex AI</span> with Practical Results
+                                Powering <span className="text-purple-500">Digital Transformation</span> with AI-Driven Innovation
                             </h2>
                             <p className="text-gray-400 text-sm sm:text-base md:text-lg mb-6 md:mb-10 leading-relaxed max-w-3xl">
-                                At XeiosTech, we don&apos;t just write code; we architect intelligent ecosystems.
-                                Our mission is to democratize advanced AI for businesses, transforming data
-                                into actionable insights and automated workflows.
+                                At XeiosTech Solutions, we don&apos;t just build software we engineer AI-powered digital ecosystems.
+                                Our mission is to make advanced AI integration accessible for businesses by transforming data into
+                                intelligent decisions, automated workflows, and scalable solutions.
                             </p>
 
                             <div className="flex flex-wrap gap-x-4 sm:gap-x-8 gap-y-3 md:gap-y-4 pt-4 border-t border-white/5">
                                 {[
-                                    "Custom AI Model Integration",
-                                    "Scalable Cloud Architecture",
-                                    "User-Centric Data Visualization",
+                                    "Custom AI Integration",
+                                    "MVP Development",
+                                    "Data Solutions",
                                 ].map((item, index) => (
                                     <div key={index} className="flex items-center gap-2 md:gap-3">
                                         <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-xeios/10 flex items-center justify-center flex-shrink-0">

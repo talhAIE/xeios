@@ -6,42 +6,42 @@ import Image from "next/image";
 const expertise = [
     {
         title: "Website Development",
-        desc: "Custom web solutions built with modern technologies for optimal performance.",
+        desc: "Developing AI-powered web solutions for smarter and optimized experiences.",
         image: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=800&q=80",
     },
     {
         title: "Mobile App Development",
-        desc: "Native and cross-platform mobile apps designed for seamless user experiences.",
+        desc: "AI-powered mobile apps designed to drive seamless operations and business growth.",
         image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
     },
     {
         title: "AI Workflow Automation",
-        desc: "Streamline operations with intelligent automation and workflow optimization.",
+        desc: "AI-driven automation to optimize workflows and reduce manual work.",
         image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80",
     },
     {
         title: "Autonomous AI Agents",
-        desc: "Self-learning agents capable of executing complex tasks independently.",
+        desc: "Self-learning AI agents built to execute complex tasks autonomously and efficiently.",
         image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80",
     },
     {
         title: "Intelligent ChatBots",
-        desc: "Conversational AI that enhances customer support and engagement 24/7.",
+        desc: "AI-powered chatbots designed to automate customer support and engagement 24/7.",
         image: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=800&q=80",
     },
     {
         title: "Predictive Analytics",
-        desc: "Data-driven insights to forecast trends and make informed decisions.",
+        desc: "AI-driven insights to forecast trends and support smarter business decisions.",
         image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
     },
     {
         title: "Computer Vision",
-        desc: "Advanced image processing solutions for object detection and analysis.",
+        desc: "Advanced image processing with AI-powered solutions for object detection and analysis.",
         image: "https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&w=800&q=80",
     },
     {
         title: "NLP Solutions",
-        desc: "Natural Language Processing for sentiment analysis and text interactions.",
+        desc: "AI-powered Natural Language Processing for intelligent text analysis and sentiment insights.",
         image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=800&q=80",
     },
 ];
