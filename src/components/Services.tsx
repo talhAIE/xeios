@@ -52,40 +52,37 @@ const gradientWords = ["AI", "Capabilities"];
 
 const headingContainerVariants: Variants = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+    visible: { transition: { staggerChildren: 0.08 } },
 };
 
 const wordVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 },
     visible: {
         opacity: 1,
         y: 0,
-        transition: { duration: 0.5, ease: "easeOut" },
+        transition: { duration: 0.3, ease: "easeOut" },
     },
 };
 
 const labelVariants: Variants = {
-    hidden: { opacity: 0, y: 20, letterSpacing: "0em" },
+    hidden: { opacity: 0 },
     visible: {
         opacity: 1,
-        y: 0,
-        letterSpacing: "0.15em",
-        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+        transition: { duration: 0.4, ease: "easeOut" },
     },
 };
 
 const gridVariants: Variants = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } },
+    visible: { transition: { staggerChildren: 0.06 } },
 };
 
 const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 40, scale: 0.98 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
         opacity: 1,
         y: 0,
-        scale: 1,
-        transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+        transition: { duration: 0.4, ease: "easeOut" },
     },
 };
 
@@ -102,7 +99,7 @@ export default function Services() {
                     variants={headingContainerVariants}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: false, amount: 0.5 }}
+                    viewport={{ once: true, amount: 0.3 }}
                 >
                     <motion.span
                         className="text-xeios font-bold text-xl tracking-wide inline-block"
@@ -134,18 +131,14 @@ export default function Services() {
                     variants={gridVariants}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: false, amount: 0.1 }}
+                    viewport={{ once: true, amount: 0.1 }}
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
                 >
                     {expertise.map((item) => (
                         <motion.div
                             key={item.title}
                             variants={cardVariants}
-                            whileHover={{
-                                y: -5,
-                                transition: { duration: 0.3, ease: "easeOut" },
-                            }}
-                            className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-xeios/15 transition-shadow duration-500 border border-purple-900/20 hover:border-xeios/50"
+                            className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-xl transition-shadow duration-300 border border-purple-900/20 hover:border-xeios/50"
                         >
                             {/* Shimmer skeleton */}
                             <div className="absolute inset-0 bg-surface animate-pulse z-0" aria-hidden="true" />
@@ -155,7 +148,7 @@ export default function Services() {
                                 src={item.image}
                                 alt={item.title}
                                 fill
-                                className="object-cover transition-transform duration-700 group-hover:scale-110 z-10"
+                                className="object-cover md:group-hover:scale-105 transition-transform duration-500 z-10"
                                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             />
 
@@ -163,18 +156,18 @@ export default function Services() {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent z-20" />
 
                             {/* Content — slides up on hover */}
-                            <div className="absolute bottom-0 left-0 right-0 p-6 z-30 bg-white/5 backdrop-blur-md border-t border-white/10 group-hover:bg-white/10 transition-all duration-300 translate-y-0 group-hover:-translate-y-1">
+                            <div className="absolute bottom-0 left-0 right-0 p-6 z-30 bg-gradient-to-t from-black/90 to-transparent md:bg-white/5 md:backdrop-blur-sm border-t border-white/10 md:group-hover:bg-white/10 transition-all duration-300">
                                 <h3 className="text-xl font-bold text-white mb-2">
                                     {item.title}
                                 </h3>
-                                <p className="text-sm text-gray-200 line-clamp-2 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                                <p className="text-sm text-gray-200 line-clamp-2 opacity-90 md:opacity-80 md:group-hover:opacity-100 transition-opacity duration-300">
                                     {item.desc}
                                 </p>
                             </div>
 
-                            {/* Hover Border Glow */}
-                            <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-xeios/50 transition-colors duration-300 pointer-events-none z-40" />
-                            <div className="absolute inset-0 rounded-2xl ring-1 ring-white/10 group-hover:ring-xeios/30 z-50 pointer-events-none transition-all duration-500" />
+                            {/* Hover Border Glow - Desktop only */}
+                            <div className="hidden md:block absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-xeios/50 transition-colors duration-300 pointer-events-none z-40" />
+                            <div className="absolute inset-0 rounded-2xl ring-1 ring-white/10 md:group-hover:ring-xeios/30 z-50 pointer-events-none transition-all duration-300" />
                         </motion.div>
                     ))}
                 </motion.div>
