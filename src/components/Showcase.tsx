@@ -327,21 +327,20 @@ export default function Showcase() {
                 role="tab"
                 aria-selected={idx === currentIndex}
                 onClick={() => navigate(idx)}
-                className={`rounded-full transition-all duration-400 min-w-[44px] min-h-[44px] flex items-center justify-center ${
-                  idx === currentIndex
-                    ? "bg-white shadow-[0_2px_8px_rgba(255,255,255,0.2)]"
-                    : "bg-transparent hover:bg-white/10"
-                }`}
+                className={`rounded-full transition-all duration-500 flex items-center justify-center ${idx === currentIndex
+                  ? "w-8 h-8 bg-white/10"
+                  : "w-8 h-8 bg-transparent hover:bg-white/5"
+                  }`}
                 whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 aria-label={`Go to project: ${p.title}`}
               >
                 {/* Visual dot indicator inside the touch target */}
                 <span
-                  className={`rounded-full transition-all duration-300 ${
-                    idx === currentIndex
-                      ? "w-8 h-3 bg-white"
-                      : "w-3 h-3 bg-white/20"
-                  }`}
+                  className={`rounded-full transition-all duration-500 ${idx === currentIndex
+                    ? "w-2.5 h-2.5 bg-white shadow-[0_0_10px_rgba(255,255,255,0.4)]"
+                    : "w-1.5 h-1.5 bg-white/20"
+                    }`}
                 />
               </motion.button>
             ))}

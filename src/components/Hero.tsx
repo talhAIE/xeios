@@ -55,12 +55,10 @@ export default function Hero() {
             {/* Abstract Background */}
             <div className="absolute inset-0 z-0 bg-background">
                 <ParticleCanvas
-                    particleColor="rgba(167, 100, 220, 0.6)"
-                    lineColor="rgba(103, 44, 141, 0.5)"
-                    lineHoverColor="rgba(255, 255, 255, 0.5)"
-                    bgColor="#0A0118"
-                    density={14000}
-                    mouseRadius={180}
+                    className="opacity-40"
+                    density={10000}
+                    particleColor="rgba(167, 100, 220, 0.5)"
+                    lineColor="rgba(140, 80, 200, 0.3)"
                 />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(103,44,141,0.15)_0%,transparent_70%)] pointer-events-none" />
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/20 to-transparent" />

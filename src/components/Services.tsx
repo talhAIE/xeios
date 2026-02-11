@@ -56,12 +56,11 @@ const headingContainerVariants: Variants = {
 };
 
 const wordVariants: Variants = {
-    hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
+    hidden: { opacity: 0, y: 20 },
     visible: {
         opacity: 1,
         y: 0,
-        filter: "blur(0px)",
-        transition: { type: "spring", damping: 20, stiffness: 120 },
+        transition: { duration: 0.5, ease: "easeOut" },
     },
 };
 
@@ -81,13 +80,12 @@ const gridVariants: Variants = {
 };
 
 const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 60, scale: 0.92, filter: "blur(6px)" },
+    hidden: { opacity: 0, y: 40, scale: 0.98 },
     visible: {
         opacity: 1,
         y: 0,
         scale: 1,
-        filter: "blur(0px)",
-        transition: { type: "spring", damping: 22, stiffness: 100 },
+        transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
     },
 };
 
@@ -144,9 +142,8 @@ export default function Services() {
                             key={item.title}
                             variants={cardVariants}
                             whileHover={{
-                                y: -8,
-                                scale: 1.03,
-                                transition: { type: "spring", stiffness: 300, damping: 20 },
+                                y: -5,
+                                transition: { duration: 0.3, ease: "easeOut" },
                             }}
                             className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-xeios/15 transition-shadow duration-500 border border-purple-900/20 hover:border-xeios/50"
                         >
