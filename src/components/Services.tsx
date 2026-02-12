@@ -17,7 +17,7 @@ const expertise = [
     {
         title: "AI Workflow Automation",
         desc: "AI-driven automation to optimize workflows and reduce manual work.",
-        image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80",
+        image: "/AI_WF.png",
     },
     {
         title: "Autonomous AI Agents",
@@ -27,22 +27,22 @@ const expertise = [
     {
         title: "Intelligent ChatBots",
         desc: "AI-powered chatbots designed to automate customer support and engagement 24/7.",
-        image: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=800&q=80",
+        image: "/IB.png",
     },
     {
         title: "Predictive Analytics",
         desc: "AI-driven insights to forecast trends and support smarter business decisions.",
-        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+        image: "/PA.png",
     },
     {
         title: "Computer Vision",
         desc: "Advanced image processing with AI-powered solutions for object detection and analysis.",
-        image: "https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&w=800&q=80",
+        image: "/CV_1.png",
     },
     {
         title: "NLP Solutions",
         desc: "AI-powered Natural Language Processing for intelligent text analysis and sentiment insights.",
-        image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=800&q=80",
+        image: "/NLP.png",
     },
 ];
 
