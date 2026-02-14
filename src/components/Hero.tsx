@@ -65,10 +65,10 @@ export default function Hero() {
                 <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/10 to-transparent" />
             </div>
 
-            <div className="container mx-auto px-6 relative z-10 text-center">
+            <div className="container mx-auto px-4 sm:px-6 relative z-10 text-center">
                 {/* Animated Heading — replays on scroll */}
                 <motion.h1
-                    className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 text-white overflow-hidden"
+                    className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 sm:mb-8 text-white overflow-hidden"
                     variants={containerVariants}
                     initial="hidden"
                     whileInView="visible"

@@ -88,11 +88,11 @@ const cardVariants: Variants = {
 
 export default function Services() {
     return (
-        <section id="services" className="py-16 md:py-24 bg-background relative overflow-hidden">
+        <section id="services" className="py-12 sm:py-16 md:py-24 bg-background relative overflow-x-hidden">
             {/* Ambient glow */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(103,44,141,0.12)_0%,transparent_60%)] pointer-events-none" aria-hidden="true" />
 
-            <div className="container mx-auto px-6 relative z-10">
+            <div className="container mx-auto px-4 sm:px-6 relative z-10">
                 {/* Section Header */}
                 <motion.div
                     className="text-center mb-16"
@@ -108,7 +108,7 @@ export default function Services() {
                         OUR EXPERTISE
                     </motion.span>
 
-                    <h2 className="text-4xl md:text-5xl font-bold mt-2 text-white flex flex-wrap justify-center gap-x-[0.3em]">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 text-white flex flex-wrap justify-center gap-x-[0.3em]">
                         {headingWords.map((word) => (
                             <motion.span key={word} className="inline-block" variants={wordVariants}>
                                 {word}

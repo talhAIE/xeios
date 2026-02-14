@@ -80,13 +80,13 @@ export default function Contact() {
          ════════════════════════════════════════════ */}
       <section
         id="contact"
-        className="relative bg-background pt-16 md:pt-20 pb-16 md:pb-24 overflow-hidden"
+        className="relative bg-background pt-12 sm:pt-16 md:pt-20 pb-12 sm:pb-16 md:pb-24 overflow-x-hidden"
       >
         {/* Ambient glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-xeios/10 blur-[160px] rounded-full pointer-events-none" aria-hidden="true" />
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-900/20 blur-[140px] rounded-full pointer-events-none" aria-hidden="true" />
 
-        <div className="relative z-10 container mx-auto px-6">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6">
           <motion.div
             className="text-center mb-16"
             variants={fadeUp}
@@ -327,7 +327,7 @@ export default function Contact() {
                 </div>
 
                 {/* Submit + status */}
-                <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                   <button
                     type="submit"
                     disabled={status === "submitting"}
@@ -368,10 +368,10 @@ export default function Contact() {
       {/* ════════════════════════════════════════════
           FOOTER
          ════════════════════════════════════════════ */}
-      <footer className="bg-[#060010] border-t border-purple-900/30 pt-16 pb-6" role="contentinfo">
-        <div className="container mx-auto px-6">
-          {/* Footer columns */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-14">
+      <footer className="bg-[#060010] border-t border-purple-900/30 pt-12 sm:pt-16 pb-6 overflow-x-hidden" role="contentinfo">
+        <div className="container mx-auto px-4 sm:px-6">
+          {/* Footer columns: 2 cols on mobile, 4 on md+ */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 mb-10 sm:mb-14">
             {/* Brand */}
             <div className="col-span-2 md:col-span-1">
               <h4 className="text-white font-bold text-lg mb-3 tracking-tight">

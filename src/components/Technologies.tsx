@@ -147,16 +147,16 @@ export default function Technologies() {
   return (
     <section
       id="technologies"
-      className="relative py-16 md:py-28 bg-background overflow-hidden"
+      className="relative py-12 sm:py-16 md:py-28 bg-background overflow-x-hidden"
     >
       {/* Subtle top border line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/15 to-transparent" aria-hidden="true" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-20">
           <motion.h2
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white leading-none"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tighter text-white leading-none"
             variants={fadeUp}
             custom={0}
             initial="hidden"

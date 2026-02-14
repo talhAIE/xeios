@@ -83,9 +83,9 @@ const fadeUp: Variants = {
 
 const slideVariants: Variants = {
   enter: (dir: number) => ({
-    x: dir > 0 ? 600 : -600,
+    x: dir > 0 ? "100%" : "-100%",
     opacity: 0,
-    scale: 0.95,
+    scale: 0.98,
   }),
   center: {
     zIndex: 1,
@@ -95,9 +95,9 @@ const slideVariants: Variants = {
   },
   exit: (dir: number) => ({
     zIndex: 0,
-    x: dir < 0 ? 600 : -600,
+    x: dir < 0 ? "100%" : "-100%",
     opacity: 0,
-    scale: 0.95,
+    scale: 0.98,
   }),
 };
 
@@ -175,7 +175,7 @@ export default function Showcase() {
     <section
       ref={sectionRef}
       id="showcase"
-      className="relative py-16 md:py-28 bg-background overflow-hidden"
+      className="relative py-12 sm:py-16 md:py-28 bg-background overflow-x-hidden"
       tabIndex={0}
       aria-label="Project showcase carousel"
       role="region"
@@ -186,10 +186,10 @@ export default function Showcase() {
       <div className="absolute inset-0 bg-gradient-to-b from-purple-900/10 via-background to-background pointer-events-none" aria-hidden="true" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/15 to-transparent" aria-hidden="true" />
 
-      <div className="relative z-10 container mx-auto px-6">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6">
         {/* ── Header Row ── */}
         <motion.div
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14"
+          className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-10 md:mb-14"
           variants={fadeUp}
           custom={0}
           initial="hidden"
@@ -198,7 +198,7 @@ export default function Showcase() {
         >
           <div>
             <motion.h2
-              className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight"
               variants={fadeUp}
               custom={0}
             >
@@ -227,11 +227,8 @@ export default function Showcase() {
           </motion.div>
         </motion.div>
 
-        {/* ── Project Card ── */}
-        <div
-          className="relative min-h-[700px] md:min-h-[550px] lg:min-h-[700px] w-full"
-          aria-live="polite"
-        >
+        {/* ── Project Card: content-driven height so nav never overlaps on mobile ── */}
+        <div className="relative w-full" aria-live="polite">
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={currentIndex}
@@ -245,35 +242,35 @@ export default function Showcase() {
                 opacity: { duration: 0.3 },
                 scale: { duration: 0.4 },
               }}
-              className="absolute inset-0"
+              className="relative w-full"
             >
-              {/* Main Card Container matching reference code */}
-              <div className="relative border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-sm bg-white/5 border-2 border-white/10 shadow-2xl">
-                <div className="grid lg:grid-cols-2 gap-8 items-center h-full">
-                  {/* Left: Content */}
-                  <div className="relative z-10 flex flex-col justify-center">
+              {/* Main Card: responsive stack (col on mobile, 2-col on lg); height from content */}
+              <div className="relative border-white/10 rounded-3xl p-4 sm:p-6 md:p-8 backdrop-blur-sm bg-white/5 border-2 border-white/10 shadow-2xl">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center">
+                  {/* Left: Content — order-2 on mobile so image appears first */}
+                  <div className="relative z-10 flex flex-col justify-center order-2 lg:order-1">
                     <motion.div variants={contentItem}>
-                      <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6">
-                        <Layers className="w-6 h-6 text-white" />
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4 sm:mb-6">
+                        <Layers className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                       </div>
                     </motion.div>
 
                     <motion.p
-                      className="text-gray-400 text-sm font-medium tracking-wider uppercase mb-3"
+                      className="text-gray-400 text-xs sm:text-sm font-medium tracking-wider uppercase mb-2 sm:mb-3"
                       variants={contentItem}
                     >
                       {project.category}
                     </motion.p>
 
                     <motion.h3
-                      className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 leading-tight"
+                      className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4 leading-tight"
                       variants={contentItem}
                     >
                       {project.title}
                     </motion.h3>
 
                     <motion.p
-                      className="text-gray-400 text-base leading-relaxed mb-8"
+                      className="text-gray-400 text-sm sm:text-base leading-relaxed mb-6 sm:mb-8 line-clamp-3 sm:line-clamp-4 md:line-clamp-none"
                       variants={contentItem}
                     >
                       {project.desc}
@@ -282,24 +279,23 @@ export default function Showcase() {
                     <motion.div variants={contentItem}>
                       <Link
                         href={project.href}
-                        className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 text-white font-bold tracking-wide shadow-lg shadow-purple-900/20 hover:scale-105 transition-transform duration-300"
+                        className="inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-3.5 rounded-full bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 text-white font-bold text-sm sm:text-base tracking-wide shadow-lg shadow-purple-900/20 hover:scale-105 transition-transform duration-300"
                       >
                         View Project
-                        <ArrowRight className="w-5 h-5" />
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                       </Link>
                     </motion.div>
                   </div>
 
-                  {/* Right: Image */}
-                  <div className="relative w-full h-full flex items-center justify-center">
-                    <div className="relative w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/20">
+                  {/* Right: Image — aspect-ratio box so fill works; order-1 on mobile */}
+                  <div className="relative w-full flex items-center justify-center order-1 lg:order-2">
+                    <div className="relative w-full aspect-[4/3] max-h-[240px] sm:max-h-[280px] md:max-h-[320px] lg:max-h-[380px] lg:w-full rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/20">
                       <Image
                         src={project.image}
                         alt={project.title}
-                        width={800}
-                        height={600}
-                        className="w-full h-auto object-contain"
-                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 50vw"
                         priority
                       />
                     </div>
@@ -310,39 +306,36 @@ export default function Showcase() {
           </AnimatePresence>
         </div>
 
-        {/* ── Bottom Navigation: arrows + dots ── */}
-        <div className="relative z-20 flex items-center justify-center gap-4 mt-10" role="tablist" aria-label="Project navigation">
+        {/* ── Bottom Navigation: compact, single row, no overlap ── */}
+        <div
+          className="relative z-10 flex flex-nowrap items-center justify-center gap-2 sm:gap-3 mt-6 sm:mt-8 md:mt-10 px-1"
+          role="tablist"
+          aria-label="Project navigation"
+        >
           <motion.button
             onClick={prev}
-            className="w-11 h-11 rounded-full border border-purple-900/30 bg-surface text-gray-300 flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-300"
-            whileHover={{ scale: 1.1 }}
+            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-purple-900/30 bg-surface text-gray-300 flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-xeios/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Previous project"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </motion.button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-nowrap items-center justify-center gap-1 sm:gap-1.5 shrink-0">
             {projects.map((p, idx) => (
               <motion.button
                 key={idx}
                 role="tab"
                 aria-selected={idx === currentIndex}
                 onClick={() => navigate(idx)}
-                className={`rounded-full transition-all duration-500 flex items-center justify-center ${idx === currentIndex
-                  ? "w-8 h-8 bg-white/10"
-                  : "w-8 h-8 bg-transparent hover:bg-white/5"
-                  }`}
-                whileHover={{ scale: 1.1 }}
+                className={`shrink-0 rounded-full transition-all duration-300 flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 outline-none focus-visible:ring-2 focus-visible:ring-xeios/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${idx === currentIndex ? "bg-white/10" : "bg-transparent hover:bg-white/5"}`}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.9 }}
                 aria-label={`Go to project: ${p.title}`}
               >
-                {/* Visual dot indicator inside the touch target */}
                 <span
-                  className={`rounded-full transition-all duration-500 ${idx === currentIndex
-                    ? "w-2.5 h-2.5 bg-white shadow-[0_0_10px_rgba(255,255,255,0.4)]"
-                    : "w-1.5 h-1.5 bg-white/20"
-                    }`}
+                  className={`rounded-full transition-all duration-300 block ${idx === currentIndex ? "w-2 h-2 bg-white shadow-[0_0_8px_rgba(255,255,255,0.35)]" : "w-1.5 h-1.5 bg-white/25"}`}
                 />
               </motion.button>
             ))}
@@ -350,12 +343,12 @@ export default function Showcase() {
 
           <motion.button
             onClick={next}
-            className="w-11 h-11 rounded-full border border-purple-900/30 bg-surface text-gray-300 flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-300"
-            whileHover={{ scale: 1.1 }}
+            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-purple-900/30 bg-surface text-gray-300 flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-xeios/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Next project"
           >
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </motion.button>
         </div>
       </div>
