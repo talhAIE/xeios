@@ -8,59 +8,67 @@ import Link from "next/link";
 
 const projects = [
   {
-    title: "AI TUTOR - Education Learning Management System",
+    title: "SmartLearn AI Mentor – Learning Management System",
     category: "Website / LMS / Mobile App",
-    desc: "The AI Tutor App was built to provide a personalized Language-speaking practice experience through real-time, AI-driven conversations. Its core goal was to help students improve spoken language skills using CEFR-aligned topics and feedback. With two learning modes — Chat Mode and Photo Mode — the app simulates a human tutor who guides users through structured conversations and only ends the session once all learning goals are met.",
+    desc: "The SmartLearn AI Mentor App delivers personalized language practice through AI-powered conversations, using CEFR-aligned topics, instant feedback, and adaptive learning as an intelligent NLP-driven tutor.",
     image:
-      "https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1200&q=80",
+      "/Proj-1.png",
     tags: ["Python", "TensorFlow", "React"],
     href: "#contact",
   },
+
   {
-    title: "Quest Hunter GO - Interactive Adventure",
-    category: "Gaming / AR",
-    desc: "An interactive adventure game where players embark on epic quests, solve puzzles, and discover hidden treasures in a fantasy world. Built with advanced spatial awareness and augmented reality for a truly immersive gaming experience that blends the digital and physical worlds.",
+    title: "StyleVision – AI Fashion Recognition Platform",
+    category: "Web Platform / Mobile / Computer Vision",
+    desc: "StyleVision is an AI-powered platform that identifies and classifies clothing from images. Using deep learning and computer vision, it recommends similar products, enhances personalization, and enables smarter e-commerce shopping.",
     image:
-      "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80",
-    tags: ["Unity", "C#", "Blender"],
+      "/Proj-CV.png",
+    tags: ["React", "Node.js", "PostgreSQL"],
     href: "#contact",
   },
+
   {
-    title: "Virtual World - VR History Experience",
-    category: "VR / AR Experience",
-    desc: "Virtual World is a VR experience that brings history to life with AI-powered conversations with great minds and immersive journeys through iconic events and eras. Users can walk through ancient civilizations and interact with historical figures in a fully realized 3D environment.",
+    title: "HealthLedger - Medical Billing Expert",
+    category: "Website / AI Automation / Healthcare Software",
+    desc: "HealthLedger is an intelligent platform that streamlines healthcare billing with AI-powered automation. It helps medical professionals manage claims, invoices, and payments efficiently while using AI-driven analytics to reduce errors and optimize workflows.",
     image:
-      "https://images.unsplash.com/photo-1478416272538-5f7e51dc5400?auto=format&fit=crop&w=1200&q=80",
+      "/Proj-Med.png",
     tags: ["Unity", "C#", "VR SDK"],
     href: "#contact",
   },
+
   {
-    title: "QHELO - Sports Social Platform",
+    title: "FinSight AI – Smart Financial Analytics",
     category: "Web Platform / Mobile",
-    desc: "Qhelo is a Bangladeshi app that lets people easily find, join, and host sports games, book fields, invite friends, rate players, and climb leaderboards through points. The platform connects sports enthusiasts and builds local communities around shared athletic interests.",
+    desc: "FinSight AI is an AI-driven platform delivering predictive analytics and real-time investment insights. Using machine learning and NLP, it tracks portfolios, analyzes trends, and provides personalized recommendations for smarter financial decisions.",
     image:
-      "https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=1200&q=80",
+      "/Proj-Fin.png",
     tags: ["React Native", "Node.js", "PostgreSQL"],
     href: "#contact",
   },
+
+
+
   {
-    title: "Sports E-commerce Platform",
+    title: "Sportlify – Sports E-commerce Platform",
     category: "Web Platform / E-commerce",
-    desc: "A comprehensive sports e-commerce platform that allows users to buy sports equipment, clothing, and accessories. Features include secure payment integration, personalized recommendations powered by AI, and real-time inventory tracking across multiple warehouses.",
+    desc: "A modern sports e-commerce platform enabling users to purchase equipment, apparel, and accessories with ease. Powered by AI-driven recommendations and real-time inventory tracking, Sportlify offers personalized shopping experiences, secure payments, and seamless order management across multiple warehouses.",
     image:
-      "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=1200&q=80",
+      "/Proj-Sp.png",
     tags: ["React", "Node.js", "PostgreSQL"],
     href: "#contact",
   },
   {
-    title: "Chatterly - No-code AI Builder",
-    category: "Web Platform / SaaS",
-    desc: "A no-code platform that allows users to build and deploy web applications without writing a single line of code. Leverage AI to turn ideas into full-stack businesses instantly with drag-and-drop interfaces, pre-built templates, and automated deployment pipelines.",
+    title: "AI TrailQuest AR- Interactive Adventure",
+    category: "Gaming / AR",
+    desc: "An interactive AR-based exploration game powered by AI-driven location intelligence. It uses smart proximity detection to guide players to nearby POIs and unlock clues through immersive AR interactions, creating an engaging real-world discovery experience.",
     image:
-      "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1200&q=80",
-    tags: ["React", "Node.js", "PostgreSQL"],
+      "/Proj-3.png",
+    tags: ["Unity", "C#", "Blender"],
     href: "#contact",
   },
+
+
 ];
 
 // --- Animation Variants ---
