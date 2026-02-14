@@ -229,7 +229,7 @@ export default function Showcase() {
 
         {/* ── Project Card ── */}
         <div
-          className="relative min-h-[480px] md:min-h-[440px]"
+          className="relative min-h-[700px] md:min-h-[550px] lg:min-h-[700px] w-full"
           aria-live="polite"
         >
           <AnimatePresence initial={false} custom={direction} mode="wait">
@@ -247,69 +247,63 @@ export default function Showcase() {
               }}
               className="absolute inset-0"
             >
-              <div className="h-full bg-surface rounded-3xl overflow-hidden border border-purple-900/30 shadow-2xl shadow-purple-950/20 flex flex-col lg:flex-row">
-                {/* Left: Content */}
-                <motion.div
-                  className="lg:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col justify-center relative"
-                  variants={contentStagger}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <motion.div variants={contentItem}>
-                    <div className="w-10 h-10 rounded-xl bg-xeios/10 border border-xeios/20 flex items-center justify-center mb-5">
-                      <Layers className="w-5 h-5 text-xeios" />
-                    </div>
-                  </motion.div>
+              {/* Main Card Container matching reference code */}
+              <div className="relative border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-sm bg-white/5 border-2 border-white/10 shadow-2xl">
+                <div className="grid lg:grid-cols-2 gap-8 items-center h-full">
+                  {/* Left: Content */}
+                  <div className="relative z-10 flex flex-col justify-center">
+                    <motion.div variants={contentItem}>
+                      <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6">
+                        <Layers className="w-6 h-6 text-white" />
+                      </div>
+                    </motion.div>
 
-                  <motion.p
-                    className="text-gray-500 text-sm mb-3 tracking-wide"
-                    variants={contentItem}
-                  >
-                    {project.category.split(" / ").map((part, i, arr) => (
-                      <span key={part}>
-                        <span className="text-gray-400">{part}</span>
-                        {i < arr.length - 1 && (
-                          <span className="text-purple-900/60 mx-2">/</span>
-                        )}
-                      </span>
-                    ))}
-                  </motion.p>
-
-                  <motion.h3
-                    className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight mb-4 leading-tight"
-                    variants={contentItem}
-                  >
-                    {project.title}
-                  </motion.h3>
-
-                  <motion.p
-                    className="text-gray-400 text-sm md:text-base leading-relaxed mb-8 line-clamp-4 sm:line-clamp-none"
-                    variants={contentItem}
-                  >
-                    {project.desc}
-                  </motion.p>
-
-                  <motion.div variants={contentItem}>
-                    <Link
-                      href={project.href}
-                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-xeios/40 text-xeios hover:bg-xeios hover:text-white transition-all duration-300 text-sm font-semibold group"
+                    <motion.p
+                      className="text-gray-400 text-sm font-medium tracking-wider uppercase mb-3"
+                      variants={contentItem}
                     >
-                      View Project
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                    </Link>
-                  </motion.div>
-                </motion.div>
+                      {project.category}
+                    </motion.p>
 
-                {/* Right: Image */}
-                <div className="relative lg:w-1/2 h-48 sm:h-60 md:h-72 lg:h-auto bg-surface-highlight overflow-hidden">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-700 ease-out hover:scale-105"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-r from-surface/40 via-transparent to-transparent pointer-events-none lg:block hidden" />
+                    <motion.h3
+                      className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 leading-tight"
+                      variants={contentItem}
+                    >
+                      {project.title}
+                    </motion.h3>
+
+                    <motion.p
+                      className="text-gray-400 text-base leading-relaxed mb-8"
+                      variants={contentItem}
+                    >
+                      {project.desc}
+                    </motion.p>
+
+                    <motion.div variants={contentItem}>
+                      <Link
+                        href={project.href}
+                        className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 text-white font-bold tracking-wide shadow-lg shadow-purple-900/20 hover:scale-105 transition-transform duration-300"
+                      >
+                        View Project
+                        <ArrowRight className="w-5 h-5" />
+                      </Link>
+                    </motion.div>
+                  </div>
+
+                  {/* Right: Image */}
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    <div className="relative w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/20">
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        width={800}
+                        height={600}
+                        className="w-full h-auto object-contain"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        priority
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -317,7 +311,7 @@ export default function Showcase() {
         </div>
 
         {/* ── Bottom Navigation: arrows + dots ── */}
-        <div className="flex items-center justify-center gap-4 mt-10" role="tablist" aria-label="Project navigation">
+        <div className="relative z-20 flex items-center justify-center gap-4 mt-10" role="tablist" aria-label="Project navigation">
           <motion.button
             onClick={prev}
             className="w-11 h-11 rounded-full border border-purple-900/30 bg-surface text-gray-300 flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-300"
