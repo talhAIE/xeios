@@ -54,20 +54,23 @@ export default function Contact() {
     const data = Object.fromEntries(formData.entries());
 
     try {
-      // TODO: Replace with your actual API endpoint (e.g. /api/contact)
-      // For now, simulate a successful submission
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-      // Log form data in development
-      if (process.env.NODE_ENV === "development") {
-        console.log("Contact form submission:", data);
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        throw new Error(json.error ?? "Server error");
       }
 
       setStatus("success");
       form.reset();
       // Reset status after 5 seconds
       setTimeout(() => setStatus("idle"), 5000);
-    } catch {
+    } catch (err) {
+      console.error("Contact form error:", err);
       setStatus("error");
       setTimeout(() => setStatus("idle"), 5000);
     }
