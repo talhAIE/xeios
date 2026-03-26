@@ -186,18 +186,18 @@ export function PremiumTestimonials() {
     <section
       id="testimonials"
       aria-labelledby="testimonials-heading"
-      className="relative py-16 md:py-28 bg-background overflow-hidden"
+      className="relative py-12 sm:py-16 md:py-28 bg-background overflow-x-hidden"
     >
       {/* Layered ambient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-background to-indigo-900/10 pointer-events-none" aria-hidden="true" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/15 to-transparent" aria-hidden="true" />
 
-      <div className="relative z-10 container mx-auto px-6">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="flex flex-col items-center justify-center max-w-3xl mx-auto mb-20">
           <motion.h2
             id="testimonials-heading"
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black tracking-tighter text-center text-white leading-[0.9]"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black tracking-tighter text-center text-white leading-[0.9]"
             variants={fadeUp}
             custom={0.1}
             initial="hidden"

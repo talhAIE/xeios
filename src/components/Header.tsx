@@ -68,12 +68,10 @@ export default function Header() {
             )}
             role="banner"
         >
-            <div className="container mx-auto px-6 flex items-center justify-between">
-                <Link href="/" className="flex items-center group">
-                    {/* Negative margins let the logo render larger without increasing header height.
-                        The logo image has significant internal whitespace, so we oversize the
-                        container and let object-contain handle the rest. */}
-                    <div className="relative h-20 w-56 md:h-24 md:w-72 -my-4 transition-transform duration-300 group-hover:scale-105">
+            <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between gap-2">
+                <Link href="/" className="flex items-center group shrink-0 min-w-0">
+                    {/* Logo scales down on small screens to avoid crowding the menu button */}
+                    <div className="relative h-14 w-36 sm:h-20 sm:w-56 md:h-24 md:w-72 -my-2 sm:-my-4 transition-transform duration-300 group-hover:scale-105">
                         <Image
                             src="/xeios_logo.png"
                             alt="XeiosTech Solutions"
@@ -142,7 +140,7 @@ export default function Header() {
                         exit={{ opacity: 0, height: 0 }}
                         className="md:hidden bg-white border-b border-gray-200 overflow-hidden shadow-lg"
                     >
-                        <div className="container mx-auto px-6 py-8 flex flex-col gap-6">
+                        <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col gap-5 sm:gap-6">
                             {navLinks.map((link) => (
                                 <Link
                                     key={link.name}

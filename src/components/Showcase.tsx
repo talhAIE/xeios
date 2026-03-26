@@ -8,59 +8,67 @@ import Link from "next/link";
 
 const projects = [
   {
-    title: "AI TUTOR - Education Learning Management System",
+    title: "SmartLearn AI Mentor – Learning Management System",
     category: "Website / LMS / Mobile App",
-    desc: "The AI Tutor App was built to provide a personalized Language-speaking practice experience through real-time, AI-driven conversations. Its core goal was to help students improve spoken language skills using CEFR-aligned topics and feedback. With two learning modes — Chat Mode and Photo Mode — the app simulates a human tutor who guides users through structured conversations and only ends the session once all learning goals are met.",
+    desc: "The SmartLearn AI Mentor App delivers personalized language practice through AI-powered conversations, using CEFR-aligned topics, instant feedback, and adaptive learning as an intelligent NLP-driven tutor.",
     image:
-      "https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1200&q=80",
+      "/Proj-1.png",
     tags: ["Python", "TensorFlow", "React"],
     href: "#contact",
   },
+
   {
-    title: "Quest Hunter GO - Interactive Adventure",
-    category: "Gaming / AR",
-    desc: "An interactive adventure game where players embark on epic quests, solve puzzles, and discover hidden treasures in a fantasy world. Built with advanced spatial awareness and augmented reality for a truly immersive gaming experience that blends the digital and physical worlds.",
+    title: "StyleVision – AI Fashion Recognition Platform",
+    category: "Web Platform / Mobile / Computer Vision",
+    desc: "StyleVision is an AI-powered platform that identifies and classifies clothing from images. Using deep learning and computer vision, it recommends similar products, enhances personalization, and enables smarter e-commerce shopping.",
     image:
-      "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80",
-    tags: ["Unity", "C#", "Blender"],
+      "/Proj-CV.png",
+    tags: ["React", "Node.js", "PostgreSQL"],
     href: "#contact",
   },
+
   {
-    title: "Virtual World - VR History Experience",
-    category: "VR / AR Experience",
-    desc: "Virtual World is a VR experience that brings history to life with AI-powered conversations with great minds and immersive journeys through iconic events and eras. Users can walk through ancient civilizations and interact with historical figures in a fully realized 3D environment.",
+    title: "HealthLedger - Medical Billing Expert",
+    category: "Website / AI Automation / Healthcare Software",
+    desc: "HealthLedger is an intelligent platform that streamlines healthcare billing with AI-powered automation. It helps medical professionals manage claims, invoices, and payments efficiently while using AI-driven analytics to reduce errors and optimize workflows.",
     image:
-      "https://images.unsplash.com/photo-1478416272538-5f7e51dc5400?auto=format&fit=crop&w=1200&q=80",
+      "/Proj-Med.png",
     tags: ["Unity", "C#", "VR SDK"],
     href: "#contact",
   },
+
   {
-    title: "QHELO - Sports Social Platform",
+    title: "FinSight AI – Smart Financial Analytics",
     category: "Web Platform / Mobile",
-    desc: "Qhelo is a Bangladeshi app that lets people easily find, join, and host sports games, book fields, invite friends, rate players, and climb leaderboards through points. The platform connects sports enthusiasts and builds local communities around shared athletic interests.",
+    desc: "FinSight AI is an AI-driven platform delivering predictive analytics and real-time investment insights. Using machine learning and NLP, it tracks portfolios, analyzes trends, and provides personalized recommendations for smarter financial decisions.",
     image:
-      "https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=1200&q=80",
+      "/Proj-Fin.png",
     tags: ["React Native", "Node.js", "PostgreSQL"],
     href: "#contact",
   },
+
+
+
   {
-    title: "Sports E-commerce Platform",
+    title: "Sportlify – Sports E-commerce Platform",
     category: "Web Platform / E-commerce",
-    desc: "A comprehensive sports e-commerce platform that allows users to buy sports equipment, clothing, and accessories. Features include secure payment integration, personalized recommendations powered by AI, and real-time inventory tracking across multiple warehouses.",
+    desc: "A modern sports e-commerce platform enabling users to purchase equipment, apparel, and accessories with ease. Powered by AI-driven recommendations and real-time inventory tracking, Sportlify offers personalized shopping experiences, secure payments, and seamless order management across multiple warehouses.",
     image:
-      "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=1200&q=80",
+      "/Proj-Sp.png",
     tags: ["React", "Node.js", "PostgreSQL"],
     href: "#contact",
   },
   {
-    title: "Chatterly - No-code AI Builder",
-    category: "Web Platform / SaaS",
-    desc: "A no-code platform that allows users to build and deploy web applications without writing a single line of code. Leverage AI to turn ideas into full-stack businesses instantly with drag-and-drop interfaces, pre-built templates, and automated deployment pipelines.",
+    title: "AI TrailQuest AR- Interactive Adventure",
+    category: "Gaming / AR",
+    desc: "An interactive AR-based exploration game powered by AI-driven location intelligence. It uses smart proximity detection to guide players to nearby POIs and unlock clues through immersive AR interactions, creating an engaging real-world discovery experience.",
     image:
-      "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1200&q=80",
-    tags: ["React", "Node.js", "PostgreSQL"],
+      "/Proj-3.png",
+    tags: ["Unity", "C#", "Blender"],
     href: "#contact",
   },
+
+
 ];
 
 // --- Animation Variants ---
@@ -75,9 +83,9 @@ const fadeUp: Variants = {
 
 const slideVariants: Variants = {
   enter: (dir: number) => ({
-    x: dir > 0 ? 600 : -600,
+    x: dir > 0 ? "100%" : "-100%",
     opacity: 0,
-    scale: 0.95,
+    scale: 0.98,
   }),
   center: {
     zIndex: 1,
@@ -87,9 +95,9 @@ const slideVariants: Variants = {
   },
   exit: (dir: number) => ({
     zIndex: 0,
-    x: dir < 0 ? 600 : -600,
+    x: dir < 0 ? "100%" : "-100%",
     opacity: 0,
-    scale: 0.95,
+    scale: 0.98,
   }),
 };
 
@@ -167,7 +175,7 @@ export default function Showcase() {
     <section
       ref={sectionRef}
       id="showcase"
-      className="relative py-16 md:py-28 bg-background overflow-hidden"
+      className="relative py-12 sm:py-16 md:py-28 bg-background overflow-x-hidden"
       tabIndex={0}
       aria-label="Project showcase carousel"
       role="region"
@@ -178,10 +186,10 @@ export default function Showcase() {
       <div className="absolute inset-0 bg-gradient-to-b from-purple-900/10 via-background to-background pointer-events-none" aria-hidden="true" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-xeios/15 to-transparent" aria-hidden="true" />
 
-      <div className="relative z-10 container mx-auto px-6">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6">
         {/* ── Header Row ── */}
         <motion.div
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14"
+          className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-10 md:mb-14"
           variants={fadeUp}
           custom={0}
           initial="hidden"
@@ -190,7 +198,7 @@ export default function Showcase() {
         >
           <div>
             <motion.h2
-              className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight"
               variants={fadeUp}
               custom={0}
             >
@@ -219,11 +227,8 @@ export default function Showcase() {
           </motion.div>
         </motion.div>
 
-        {/* ── Project Card ── */}
-        <div
-          className="relative min-h-[480px] md:min-h-[440px]"
-          aria-live="polite"
-        >
+        {/* ── Project Card: content-driven height so nav never overlaps on mobile ── */}
+        <div className="relative w-full" aria-live="polite">
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={currentIndex}
@@ -237,111 +242,100 @@ export default function Showcase() {
                 opacity: { duration: 0.3 },
                 scale: { duration: 0.4 },
               }}
-              className="absolute inset-0"
+              className="relative w-full"
             >
-              <div className="h-full bg-surface rounded-3xl overflow-hidden border border-purple-900/30 shadow-2xl shadow-purple-950/20 flex flex-col lg:flex-row">
-                {/* Left: Content */}
-                <motion.div
-                  className="lg:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col justify-center relative"
-                  variants={contentStagger}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <motion.div variants={contentItem}>
-                    <div className="w-10 h-10 rounded-xl bg-xeios/10 border border-xeios/20 flex items-center justify-center mb-5">
-                      <Layers className="w-5 h-5 text-xeios" />
-                    </div>
-                  </motion.div>
+              {/* Main Card: responsive stack (col on mobile, 2-col on lg); height from content */}
+              <div className="relative border-white/10 rounded-3xl p-4 sm:p-6 md:p-8 backdrop-blur-sm bg-white/5 border-2 border-white/10 shadow-2xl">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center">
+                  {/* Left: Content — order-2 on mobile so image appears first */}
+                  <div className="relative z-10 flex flex-col justify-center order-2 lg:order-1">
+                    <motion.div variants={contentItem}>
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4 sm:mb-6">
+                        <Layers className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                      </div>
+                    </motion.div>
 
-                  <motion.p
-                    className="text-gray-500 text-sm mb-3 tracking-wide"
-                    variants={contentItem}
-                  >
-                    {project.category.split(" / ").map((part, i, arr) => (
-                      <span key={part}>
-                        <span className="text-gray-400">{part}</span>
-                        {i < arr.length - 1 && (
-                          <span className="text-purple-900/60 mx-2">/</span>
-                        )}
-                      </span>
-                    ))}
-                  </motion.p>
-
-                  <motion.h3
-                    className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight mb-4 leading-tight"
-                    variants={contentItem}
-                  >
-                    {project.title}
-                  </motion.h3>
-
-                  <motion.p
-                    className="text-gray-400 text-sm md:text-base leading-relaxed mb-8 line-clamp-4 sm:line-clamp-none"
-                    variants={contentItem}
-                  >
-                    {project.desc}
-                  </motion.p>
-
-                  <motion.div variants={contentItem}>
-                    <Link
-                      href={project.href}
-                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-xeios/40 text-xeios hover:bg-xeios hover:text-white transition-all duration-300 text-sm font-semibold group"
+                    <motion.p
+                      className="text-gray-400 text-xs sm:text-sm font-medium tracking-wider uppercase mb-2 sm:mb-3"
+                      variants={contentItem}
                     >
-                      View Project
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                    </Link>
-                  </motion.div>
-                </motion.div>
+                      {project.category}
+                    </motion.p>
 
-                {/* Right: Image */}
-                <div className="relative lg:w-1/2 h-48 sm:h-60 md:h-72 lg:h-auto bg-surface-highlight overflow-hidden">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-700 ease-out hover:scale-105"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-r from-surface/40 via-transparent to-transparent pointer-events-none lg:block hidden" />
+                    <motion.h3
+                      className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4 leading-tight"
+                      variants={contentItem}
+                    >
+                      {project.title}
+                    </motion.h3>
+
+                    <motion.p
+                      className="text-gray-400 text-sm sm:text-base leading-relaxed mb-6 sm:mb-8 line-clamp-3 sm:line-clamp-4 md:line-clamp-none"
+                      variants={contentItem}
+                    >
+                      {project.desc}
+                    </motion.p>
+
+                    <motion.div variants={contentItem}>
+                      <Link
+                        href={project.href}
+                        className="inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-3.5 rounded-full bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 text-white font-bold text-sm sm:text-base tracking-wide shadow-lg shadow-purple-900/20 hover:scale-105 transition-transform duration-300"
+                      >
+                        View Project
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </Link>
+                    </motion.div>
+                  </div>
+
+                  {/* Right: Image — aspect-ratio box so fill works; order-1 on mobile */}
+                  <div className="relative w-full flex items-center justify-center order-1 lg:order-2">
+                    <div className="relative w-full aspect-[4/3] max-h-[240px] sm:max-h-[280px] md:max-h-[320px] lg:max-h-[380px] lg:w-full rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/20">
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 50vw"
+                        priority
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* ── Bottom Navigation: arrows + dots ── */}
-        <div className="flex items-center justify-center gap-4 mt-10" role="tablist" aria-label="Project navigation">
+        {/* ── Bottom Navigation: compact, single row, no overlap ── */}
+        <div
+          className="relative z-10 flex flex-nowrap items-center justify-center gap-2 sm:gap-3 mt-6 sm:mt-8 md:mt-10 px-1"
+          role="tablist"
+          aria-label="Project navigation"
+        >
           <motion.button
             onClick={prev}
-            className="w-11 h-11 rounded-full border border-purple-900/30 bg-surface text-gray-300 flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-300"
-            whileHover={{ scale: 1.1 }}
+            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-purple-900/30 bg-surface text-gray-300 flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-xeios/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Previous project"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </motion.button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-nowrap items-center justify-center gap-1 sm:gap-1.5 shrink-0">
             {projects.map((p, idx) => (
               <motion.button
                 key={idx}
                 role="tab"
                 aria-selected={idx === currentIndex}
                 onClick={() => navigate(idx)}
-                className={`rounded-full transition-all duration-400 min-w-[44px] min-h-[44px] flex items-center justify-center ${
-                  idx === currentIndex
-                    ? "bg-white shadow-[0_2px_8px_rgba(255,255,255,0.2)]"
-                    : "bg-transparent hover:bg-white/10"
-                }`}
-                whileHover={{ scale: 1.1 }}
+                className={`shrink-0 rounded-full transition-all duration-300 flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 outline-none focus-visible:ring-2 focus-visible:ring-xeios/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${idx === currentIndex ? "bg-white/10" : "bg-transparent hover:bg-white/5"}`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
                 aria-label={`Go to project: ${p.title}`}
               >
-                {/* Visual dot indicator inside the touch target */}
                 <span
-                  className={`rounded-full transition-all duration-300 ${
-                    idx === currentIndex
-                      ? "w-8 h-3 bg-white"
-                      : "w-3 h-3 bg-white/20"
-                  }`}
+                  className={`rounded-full transition-all duration-300 block ${idx === currentIndex ? "w-2 h-2 bg-white shadow-[0_0_8px_rgba(255,255,255,0.35)]" : "w-1.5 h-1.5 bg-white/25"}`}
                 />
               </motion.button>
             ))}
@@ -349,12 +343,12 @@ export default function Showcase() {
 
           <motion.button
             onClick={next}
-            className="w-11 h-11 rounded-full border border-purple-900/30 bg-surface text-gray-300 flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-300"
-            whileHover={{ scale: 1.1 }}
+            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-purple-900/30 bg-surface text-gray-300 flex items-center justify-center hover:bg-xeios hover:text-white hover:border-xeios transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-xeios/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Next project"
           >
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </motion.button>
         </div>
       </div>
