@@ -128,10 +128,8 @@ export default function Contact() {
               </h3>
 
               <p className="text-gray-400 leading-relaxed mb-10 max-w-md">
-                From AI-powered systems and full-stack web/app development to
-                AR/VR experiences, metaverse environments, and game development
-                — we build what you imagine, beautifully and{" "}
-                <span className="text-xeios-light italic">intelligently.</span>
+                From AI-driven web and mobile applications to autonomous agents, computer vision, and predictive analytics We infuse artificial intelligence into every layer of your business to build smarter, scalable, and{" "}
+                <span className="text-xeios-light italic">future-ready solutions.</span>
               </p>
 
               {/* Contact details */}
@@ -147,7 +145,7 @@ export default function Contact() {
                     href="mailto:contact@xeiostech.com"
                     className="text-gray-300 hover:text-white transition-colors text-sm"
                   >
-                    contact@xeiostech.com
+                    xeiostechsolutions@gmail.com
                   </a>
                 </div>
 
@@ -160,10 +158,10 @@ export default function Contact() {
                   </div>
                   <div className="flex flex-col text-gray-300 text-sm">
                     <a
-                      href="tel:+1234567890"
+                      href="tel:+61403013306"
                       className="hover:text-white transition-colors"
                     >
-                      +1 (234) 567-890
+                      +61 403 013 306
                     </a>
                   </div>
                 </div>
@@ -176,7 +174,7 @@ export default function Contact() {
                     </span>
                   </div>
                   <span className="text-gray-300 text-sm">
-                    Global Remote • Serving Worldwide
+                    44 Featherwood Cres Craigieburn Vic 3064
                   </span>
                 </div>
               </div>
@@ -221,7 +219,7 @@ export default function Contact() {
                   Send us a message
                 </h3>
                 <p className="text-gray-500 text-sm mb-8">
-                  AI, Web &amp; App Development, AR/VR, Metaverse, Gaming
+                  AI-Powered Web & App Development, Autonomous Agents, Computer Vision, NLP
                 </p>
 
                 {/* Name + Company */}
@@ -448,16 +446,16 @@ export default function Contact() {
                     href="mailto:info@xeiostech.com"
                     className="text-gray-500 text-sm hover:text-xeios transition-colors"
                   >
-                    info@xeiostech.com
+                    xeiostechsolutions@gmail.com
                   </a>
                 </li>
                 <li>
-                  <a
+                  {/* <a
                     href="mailto:hr@xeiostech.com"
                     className="text-gray-500 text-sm hover:text-xeios transition-colors"
                   >
                     hr@xeiostech.com
-                  </a>
+                  </a> */}
                 </li>
               </ul>
             </div>

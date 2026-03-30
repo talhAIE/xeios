@@ -11,10 +11,10 @@ const navLinks = [
     { name: "Home", href: "#hero" },
     { name: "About", href: "#about" },
     { name: "Services", href: "#services" },
-    { name: "Technologies", href: "#technologies" },
-    { name: "Showcase", href: "#showcase" },
+    { name: "Showcase", href: "#Showcase" },
     { name: "Reviews", href: "#testimonials" },
-    { name: "Contact", href: "#contact" },
+    { name: "Contact", href: "#Contact" },
+    { name: "+61-403-013-306", href: "tel:+61403013306" },
 ];
 
 export default function Header() {
