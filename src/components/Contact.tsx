@@ -35,8 +35,7 @@ const services = [
   "Web Development",
   "Mobile Development",
   "AI Solutions",
-  "VR Development",
-  "Game Development",
+  "Chatbot Development",
   "Data Analytics",
 ];
 
@@ -142,10 +141,10 @@ export default function Contact() {
                     </span>
                   </div>
                   <a
-                    href="mailto:contact@xeiostech.com"
+                    href="mailto:info@xeiostechsolutions.com"
                     className="text-gray-300 hover:text-white transition-colors text-sm"
                   >
-                    xeiostechsolutions@gmail.com
+                    info@xeiostechsolutions.com
                   </a>
                 </div>
 
@@ -446,7 +445,7 @@ export default function Contact() {
                     href="mailto:info@xeiostech.com"
                     className="text-gray-500 text-sm hover:text-xeios transition-colors"
                   >
-                    xeiostechsolutions@gmail.com
+                    info@xeiostechsolutions.com
                   </a>
                 </li>
                 <li>
