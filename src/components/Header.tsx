@@ -83,12 +83,12 @@ export default function Header() {
                 </Link>
 
                 {/* Desktop Navigation */}
-                <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
+                <nav className="hidden lg:flex items-center gap-4 xl:gap-8" aria-label="Main navigation">
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-sm font-medium text-gray-600 hover:text-xeios transition-colors relative group"
+                            className="text-sm font-medium text-gray-600 hover:text-xeios transition-colors relative group whitespace-nowrap"
                         >
                             {link.name}
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-xeios transition-all duration-300 group-hover:w-full" />
@@ -118,7 +118,7 @@ export default function Header() {
 
                 {/* Mobile Menu Button */}
                 <button
-                    className="md:hidden text-gray-600 hover:text-xeios p-2"
+                    className="lg:hidden text-gray-600 hover:text-xeios p-2"
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
                     aria-expanded={isMobileMenuOpen}
@@ -138,7 +138,7 @@ export default function Header() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-white border-b border-gray-200 overflow-hidden shadow-lg"
+                        className="lg:hidden bg-white border-b border-gray-200 overflow-hidden shadow-lg"
                     >
                         <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col gap-5 sm:gap-6">
                             {navLinks.map((link) => (
