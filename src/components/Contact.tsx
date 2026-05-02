@@ -8,11 +8,20 @@ import {
   Phone,
   MapPin,
   ArrowRight,
-  Facebook,
-  Instagram,
   Linkedin,
   CheckCircle2,
 } from "lucide-react";
+
+const XLogo = ({ className }: { className?: string }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    viewBox="0 0 24 24" 
+    fill="currentColor" 
+    className={className}
+  >
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -185,13 +194,14 @@ export default function Contact() {
                 </p>
                 <div className="flex gap-3">
                   {[
-                    { icon: Facebook, href: "#", label: "Facebook" },
-                    { icon: Instagram, href: "#", label: "Instagram" },
-                    { icon: Linkedin, href: "#", label: "LinkedIn" },
+                    { icon: XLogo, href: "https://x.com/XeiosTechSol", label: "X" },
+                    { icon: Linkedin, href: "https://www.linkedin.com/company/xeiostechsolutions", label: "LinkedIn" },
                   ].map(({ icon: Icon, href, label }) => (
                     <a
                       key={label}
                       href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       aria-label={label}
                       className="w-11 h-11 rounded-full bg-xeios/10 border border-xeios/20 flex items-center justify-center text-xeios hover:bg-xeios hover:text-white transition-all duration-300"
                     >
@@ -384,13 +394,14 @@ export default function Contact() {
               </p>
               <div className="flex gap-3">
                 {[
-                  { icon: Facebook, label: "Facebook" },
-                  { icon: Instagram, label: "Instagram" },
-                  { icon: Linkedin, label: "LinkedIn" },
-                ].map(({ icon: Icon, label }) => (
+                  { icon: XLogo, href: "https://x.com/XeiosTechSol", label: "X" },
+                  { icon: Linkedin, href: "https://www.linkedin.com/company/xeiostechsolutions", label: "LinkedIn" },
+                ].map(({ icon: Icon, href, label }) => (
                   <a
                     key={label}
-                    href="#"
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label={label}
                     className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 hover:text-xeios hover:border-xeios/30 transition-all duration-300"
                   >

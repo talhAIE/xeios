@@ -58,15 +58,15 @@ const projects = [
     tags: ["React", "Node.js", "PostgreSQL"],
     href: "#contact",
   },
-  {
-    title: "AI TrailQuest AR- Interactive Adventure",
-    category: "Gaming / AR",
-    desc: "An interactive AR-based exploration game powered by AI-driven location intelligence. It uses smart proximity detection to guide players to nearby POIs and unlock clues through immersive AR interactions, creating an engaging real-world discovery experience.",
-    image:
-      "/Proj-3.png",
-    tags: ["Unity", "C#", "Blender"],
-    href: "#contact",
-  },
+  // {
+  //   title: "AI TrailQuest AR- Interactive Adventure",
+  //   category: "Gaming / AR",
+  //   desc: "An interactive AR-based exploration game powered by AI-driven location intelligence. It uses smart proximity detection to guide players to nearby POIs and unlock clues through immersive AR interactions, creating an engaging real-world discovery experience.",
+  //   image:
+  //     "/Proj-3.png",
+  //   tags: ["Unity", "C#", "Blender"],
+  //   href: "#contact",
+  // },
 
 
 ];
