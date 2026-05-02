@@ -12,15 +12,15 @@ export async function GET(request: Request) {
 
   try {
     // Perform a lightweight query to wake the database
-    // We try to fetch 1 row from 'contacts' (which the site uses)
+    // We try to fetch 1 row from 'contact_submissions' (which the site uses)
     const { data, error } = await supabaseAdmin
-      .from('contacts')
+      .from('contact_submissions')
       .select('id')
       .limit(1);
 
     // If there's an error calling a table, we log it, but the connection was still made keeping the DB awake
     if (error) {
-       console.log("Supabase connection made, but contacts query failed (table might be empty or missing yet):", error.message);
+       console.log("Supabase connection made, but contact_submissions query failed (table might be empty or missing yet):", error.message);
     }
 
     return NextResponse.json({ success: true, message: 'Supabase keep-alive successful', time: new Date().toISOString() }, { status: 200 });
