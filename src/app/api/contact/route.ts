@@ -2,10 +2,31 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { supabaseAdmin } from "@/lib/supabase";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+    const key = process.env.RESEND_API_KEY;
+    if (!key) return null;
+    return new Resend(key);
+}
+
+function missingEnvVars(): string[] {
+    const required = [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "SUPABASE_SERVICE_ROLE_KEY",
+    ] as const;
+    return required.filter((name) => !process.env[name]?.trim());
+}
 
 export async function POST(req: NextRequest) {
     try {
+        const missing = missingEnvVars();
+        if (missing.length > 0) {
+            console.error("Contact API misconfigured — missing env:", missing.join(", "));
+            return NextResponse.json(
+                { error: "Server configuration error. Please contact support." },
+                { status: 500 }
+            );
+        }
+
         const body = await req.json();
         const { name, company, phone, email, subject, message } = body;
 
@@ -23,9 +44,14 @@ export async function POST(req: NextRequest) {
             .insert([{ name, company, phone, email, subject, message }]);
 
         if (dbError) {
-            console.error("Supabase insert error:", dbError);
+            console.error("Supabase insert error:", dbError.message, dbError.code, dbError.details);
             return NextResponse.json(
-                { error: "Failed to save your message. Please try again." },
+                {
+                    error: "Failed to save your message. Please try again.",
+                    ...(process.env.NODE_ENV === "development" && {
+                        debug: dbError.message,
+                    }),
+                },
                 { status: 500 }
             );
         }
@@ -35,6 +61,12 @@ export async function POST(req: NextRequest) {
             .split(",")
             .map((e) => e.trim())
             .filter(Boolean);
+
+        const resend = getResend();
+        if (!resend) {
+            console.warn("RESEND_API_KEY not set — submission saved but no email sent");
+            return NextResponse.json({ success: true }, { status: 200 });
+        }
 
         const { error: emailError } = await resend.emails.send({
             from: process.env.CONTACT_EMAIL_FROM ?? "XeiosTech <noreply@xeiostech.com>",
