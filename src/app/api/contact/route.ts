@@ -69,14 +69,20 @@ export async function POST(req: NextRequest) {
         const resend = getResend();
         if (!resend) {
             console.warn("RESEND_API_KEY not set — submission saved but no email sent");
-            return NextResponse.json({ success: true, emailSent: false }, { status: 200 });
+            return NextResponse.json(
+                { success: true, emailSent: false, emailReason: "missing_resend_api_key" },
+                { status: 200 }
+            );
         }
 
         if (recipients.length === 0) {
             console.error(
                 "CONTACT_EMAIL_TO is empty — submission saved but no email sent. Set CONTACT_EMAIL_TO on Vercel."
             );
-            return NextResponse.json({ success: true, emailSent: false }, { status: 200 });
+            return NextResponse.json(
+                { success: true, emailSent: false, emailReason: "missing_contact_email_to" },
+                { status: 200 }
+            );
         }
 
         const { data: emailData, error: emailError } = await resend.emails.send({
@@ -149,7 +155,14 @@ export async function POST(req: NextRequest) {
 
         if (emailError) {
             console.error("Resend email error:", JSON.stringify(emailError));
-            return NextResponse.json({ success: true, emailSent: false }, { status: 200 });
+            return NextResponse.json(
+                {
+                    success: true,
+                    emailSent: false,
+                    emailReason: "resend_send_failed",
+                },
+                { status: 200 }
+            );
         }
 
         console.log("Resend email sent:", emailData?.id, "to:", recipients.join(", "));

@@ -41,8 +41,15 @@ const services = [
 
 type FormStatus = "idle" | "submitting" | "success" | "success_no_email" | "error";
 
+const EMAIL_REASON_MESSAGES: Record<string, string> = {
+  missing_resend_api_key: "Saved — add RESEND_API_KEY on Vercel and redeploy",
+  missing_contact_email_to: "Saved — add CONTACT_EMAIL_TO on Vercel and redeploy",
+  resend_send_failed: "Saved — Resend rejected the email (check API key & domain)",
+};
+
 export default function Contact() {
   const [status, setStatus] = useState<FormStatus>("idle");
+  const [emailHint, setEmailHint] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -66,6 +73,12 @@ export default function Contact() {
       }
 
       setStatus(json.emailSent === false ? "success_no_email" : "success");
+      setEmailHint(
+        json.emailSent === false && json.emailReason
+          ? (EMAIL_REASON_MESSAGES[json.emailReason] ??
+              "Saved — email not sent (check server config)")
+          : null
+      );
       form.reset();
       // Reset status after 5 seconds
       setTimeout(() => setStatus("idle"), 5000);
@@ -355,9 +368,9 @@ export default function Contact() {
                   )}
 
                   {status === "success_no_email" && (
-                    <span className="flex items-center gap-1.5 text-sm text-amber-400">
-                      <CheckCircle2 className="w-4 h-4" />
-                      Saved — email not sent (check server config)
+                    <span className="flex items-center gap-1.5 text-sm text-amber-400 max-w-xs">
+                      <CheckCircle2 className="w-4 h-4 shrink-0" />
+                      {emailHint ?? "Saved — email not sent (check server config)"}
                     </span>
                   )}
 
