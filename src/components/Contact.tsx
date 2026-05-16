@@ -39,7 +39,7 @@ const services = [
   "Data Analytics",
 ];
 
-type FormStatus = "idle" | "submitting" | "success" | "error";
+type FormStatus = "idle" | "submitting" | "success" | "success_no_email" | "error";
 
 export default function Contact() {
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -59,12 +59,13 @@ export default function Contact() {
         body: JSON.stringify(data),
       });
 
+      const json = await res.json().catch(() => ({}));
+
       if (!res.ok) {
-        const json = await res.json().catch(() => ({}));
         throw new Error(json.error ?? "Server error");
       }
 
-      setStatus("success");
+      setStatus(json.emailSent === false ? "success_no_email" : "success");
       form.reset();
       // Reset status after 5 seconds
       setTimeout(() => setStatus("idle"), 5000);
@@ -350,6 +351,13 @@ export default function Contact() {
                     <span className="flex items-center gap-1.5 text-sm text-green-400">
                       <CheckCircle2 className="w-4 h-4" />
                       Message sent!
+                    </span>
+                  )}
+
+                  {status === "success_no_email" && (
+                    <span className="flex items-center gap-1.5 text-sm text-amber-400">
+                      <CheckCircle2 className="w-4 h-4" />
+                      Saved — email not sent (check server config)
                     </span>
                   )}
 

@@ -62,14 +62,25 @@ export async function POST(req: NextRequest) {
             .map((e) => e.trim())
             .filter(Boolean);
 
+        const fromAddress =
+            process.env.CONTACT_EMAIL_FROM?.trim() ||
+            "XeiosTech <noreply@xeiostechsolutions.com>";
+
         const resend = getResend();
         if (!resend) {
             console.warn("RESEND_API_KEY not set — submission saved but no email sent");
-            return NextResponse.json({ success: true }, { status: 200 });
+            return NextResponse.json({ success: true, emailSent: false }, { status: 200 });
         }
 
-        const { error: emailError } = await resend.emails.send({
-            from: process.env.CONTACT_EMAIL_FROM ?? "XeiosTech <noreply@xeiostech.com>",
+        if (recipients.length === 0) {
+            console.error(
+                "CONTACT_EMAIL_TO is empty — submission saved but no email sent. Set CONTACT_EMAIL_TO on Vercel."
+            );
+            return NextResponse.json({ success: true, emailSent: false }, { status: 200 });
+        }
+
+        const { data: emailData, error: emailError } = await resend.emails.send({
+            from: fromAddress,
             to: recipients,
             replyTo: email,
             subject: `New Contact Form Submission — ${subject || "No Subject"} | XeiosTech`,
@@ -137,11 +148,12 @@ export async function POST(req: NextRequest) {
         });
 
         if (emailError) {
-            // DB save succeeded but email failed — log it, don't fail the user
-            console.error("Resend email error:", emailError);
+            console.error("Resend email error:", JSON.stringify(emailError));
+            return NextResponse.json({ success: true, emailSent: false }, { status: 200 });
         }
 
-        return NextResponse.json({ success: true }, { status: 200 });
+        console.log("Resend email sent:", emailData?.id, "to:", recipients.join(", "));
+        return NextResponse.json({ success: true, emailSent: true }, { status: 200 });
     } catch (err) {
         console.error("Contact API unexpected error:", err);
         return NextResponse.json(
