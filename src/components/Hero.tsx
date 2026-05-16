@@ -17,22 +17,20 @@ const containerVariants: Variants = {
 };
 
 const wordVariants: Variants = {
-    hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
+    hidden: { opacity: 0, y: 40 },
     visible: {
         opacity: 1,
         y: 0,
-        filter: "blur(0px)",
         transition: { type: "spring", damping: 20, stiffness: 120 },
     },
 };
 
 const gradientLineVariants: Variants = {
-    hidden: { opacity: 0, y: 50, scale: 0.9, filter: "blur(12px)" },
+    hidden: { opacity: 0, y: 50, scale: 0.9 },
     visible: {
         opacity: 1,
         y: 0,
         scale: 1,
-        filter: "blur(0px)",
         transition: { type: "spring", damping: 18, stiffness: 100, delay: 0.5 },
     },
 };
