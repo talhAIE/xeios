@@ -39,17 +39,20 @@ const services = [
   "Data Analytics",
 ];
 
-type FormStatus = "idle" | "submitting" | "success" | "success_no_email" | "error";
+const SOCIAL_LINKS = [
+  { icon: Facebook, href: "#", label: "Facebook" },
+  { icon: Instagram, href: "#", label: "Instagram" },
+  {
+    icon: Linkedin,
+    href: "https://www.linkedin.com/company/xeiostechsolutions",
+    label: "LinkedIn",
+  },
+] as const;
 
-const EMAIL_REASON_MESSAGES: Record<string, string> = {
-  missing_resend_api_key: "Saved — add RESEND_API_KEY on Vercel and redeploy",
-  missing_contact_email_to: "Saved — add CONTACT_EMAIL_TO on Vercel and redeploy",
-  resend_send_failed: "Saved — Resend rejected the email (check API key & domain)",
-};
+type FormStatus = "idle" | "submitting" | "success" | "error";
 
 export default function Contact() {
   const [status, setStatus] = useState<FormStatus>("idle");
-  const [emailHint, setEmailHint] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -72,13 +75,7 @@ export default function Contact() {
         throw new Error(json.error ?? "Server error");
       }
 
-      setStatus(json.emailSent === false ? "success_no_email" : "success");
-      setEmailHint(
-        json.emailSent === false && json.emailReason
-          ? (EMAIL_REASON_MESSAGES[json.emailReason] ??
-              "Saved — email not sent (check server config)")
-          : null
-      );
+      setStatus("success");
       form.reset();
       // Reset status after 5 seconds
       setTimeout(() => setStatus("idle"), 5000);
@@ -198,15 +195,14 @@ export default function Contact() {
                   Follow our social media
                 </p>
                 <div className="flex gap-3">
-                  {[
-                    { icon: Facebook, href: "#", label: "Facebook" },
-                    { icon: Instagram, href: "#", label: "Instagram" },
-                    { icon: Linkedin, href: "#", label: "LinkedIn" },
-                  ].map(({ icon: Icon, href, label }) => (
+                  {SOCIAL_LINKS.map(({ icon: Icon, href, label }) => (
                     <a
                       key={label}
                       href={href}
                       aria-label={label}
+                      {...(href.startsWith("http")
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
                       className="w-11 h-11 rounded-full bg-xeios/10 border border-xeios/20 flex items-center justify-center text-xeios hover:bg-xeios hover:text-white transition-all duration-300"
                     >
                       <Icon className="w-4 h-4" />
@@ -231,8 +227,15 @@ export default function Contact() {
                 <h3 className="text-xl font-bold text-white mb-1">
                   Send us a message
                 </h3>
-                <p className="text-gray-500 text-sm mb-8">
-                  AI-Powered Web & App Development, Autonomous Agents, Computer Vision, NLP
+                <p className="text-gray-500 text-sm mb-8 leading-relaxed">
+                  Please send us a message below, or call us directly at{" "}
+                  <a
+                    href="tel:+61403013306"
+                    className="text-xeios-light hover:text-white transition-colors font-medium"
+                  >
+                    +61 403 013 306
+                  </a>
+                  .
                 </p>
 
                 {/* Name + Company */}
@@ -367,13 +370,6 @@ export default function Contact() {
                     </span>
                   )}
 
-                  {status === "success_no_email" && (
-                    <span className="flex items-center gap-1.5 text-sm text-amber-400 max-w-xs">
-                      <CheckCircle2 className="w-4 h-4 shrink-0" />
-                      {emailHint ?? "Saved — email not sent (check server config)"}
-                    </span>
-                  )}
-
                   {status === "error" && (
                     <span className="text-sm text-red-400">
                       Failed to send. Please try again.
@@ -404,15 +400,14 @@ export default function Contact() {
                 Next Imagine.
               </p>
               <div className="flex gap-3">
-                {[
-                  { icon: Facebook, label: "Facebook" },
-                  { icon: Instagram, label: "Instagram" },
-                  { icon: Linkedin, label: "LinkedIn" },
-                ].map(({ icon: Icon, label }) => (
+                {SOCIAL_LINKS.map(({ icon: Icon, href, label }) => (
                   <a
                     key={label}
-                    href="#"
+                    href={href}
                     aria-label={label}
+                    {...(href.startsWith("http")
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
                     className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 hover:text-xeios hover:border-xeios/30 transition-all duration-300"
                   >
                     <Icon className="w-3.5 h-3.5" />
